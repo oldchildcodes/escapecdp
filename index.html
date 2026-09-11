@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>미스터리 야외 방탈출</title>
+  <title>세겹줄 26 야외 방탈출</title>
   <style>
     * { 
       box-sizing: border-box; 
@@ -28,6 +28,7 @@
       padding: 16px; 
     }
     
+    /* 앱 본체 카드 */
     .app-container {
       width: 100%; 
       max-width: 440px; 
@@ -42,6 +43,14 @@
       display: flex; 
       flex-direction: column; 
       min-height: 620px;
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    /* 코너 최종 단서 해독 전용 배경색 (다크 버건디/미스터리 톤) */
+    .app-container.special-mode {
+      background: rgba(42, 16, 22, 0.95);
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(225, 29, 72, 0.25);
     }
 
     .view { 
@@ -52,6 +61,49 @@
       animation: fadeIn 0.35s ease; 
     }
     .view.active { display: flex; }
+
+    /* 인트로 전용 스타일 */
+    .intro-cover {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      flex: 1;
+      padding: 20px 10px;
+    }
+    .intro-badge {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #f59e0b;
+      padding: 6px 14px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 20px;
+      margin-bottom: 24px;
+    }
+    .intro-title {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.35;
+      color: #fff6e5;
+      text-shadow: 0 4px 14px rgba(0,0,0,0.8);
+      margin-bottom: 16px;
+      word-break: keep-all;
+    }
+    .intro-symbol {
+      font-size: 64px;
+      margin: 20px 0;
+      filter: drop-shadow(0 0 16px rgba(245, 158, 11, 0.4));
+    }
+    .intro-sub {
+      font-size: 15px;
+      color: #d1c0ab;
+      line-height: 1.65;
+      word-break: keep-all;
+      margin-bottom: 30px;
+    }
 
     .title { 
       font-size: 21px; 
@@ -229,7 +281,7 @@
 </head>
 <body>
 
-  <div class="app-container">
+  <div class="app-container" id="appContainer">
     
     <!-- 인벤토리 및 진행도 -->
     <div id="gameHeader" style="display: none;">
@@ -242,13 +294,27 @@
       <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
     </div>
 
-    <!-- 1. 그룹 선택 뷰 -->
-    <div id="view-group" class="view active">
-      <h2 class="title">야외 방탈출 미션<br>소속 코순을 선택하세요</h2>
+    <!-- 0. 인트로 커버 뷰 (시작 화면) -->
+    <div id="view-intro" class="view active">
+      <div class="intro-cover">
+        <div class="intro-badge">OUTDOOR MISSION</div>
+        <div class="intro-symbol">🧭</div>
+        <h1 class="intro-title">세겹줄 26<br>야외 방탈출</h1>
+        <p class="intro-sub">
+          흩어진 단서 조각을 모아<br>
+          감추어진 진실의 문을 열어라.
+        </p>
+      </div>
+      <button class="btn" onclick="goGroupSelect()">입장하기</button>
+    </div>
+
+    <!-- 1. 그룹(코순) 선택 뷰 -->
+    <div id="view-group" class="view">
+      <h2 class="title">세겹줄 26 야외 방탈출<br>소속 코순을 선택하세요</h2>
       <p class="desc" style="background: none; border: none; padding: 0;">배정받은 코순을 선택하면 지정된 시작 코너로 연결됩니다.</p>
       <div style="display: flex; flex-direction: column; gap: 14px; margin-top: auto;">
         <button class="btn" onclick="startGame(1)">윤현 코순 (A코너 시작)</button>
-        <button class="btn" onclick="startGame(2)">보라 코순 (B코너 시작)</button>
+        <button class="btn" onclick="startGame(2)">보라 코순 (D코너 시작)</button>
         <button class="btn" onclick="startGame(3)">소영 코순 (C코너 시작)</button>
       </div>
     </div>
@@ -266,30 +332,35 @@
       </div>
     </div>
 
-    <!-- 3. 일반 문제 정답 확인 뷰 -->
+    <!-- 3. 일반 문제 정답 확인 뷰 (단서/조각 안내) -->
     <div id="view-quiz-result" class="view" style="justify-content: center;">
       <div class="result-box">
         <div class="result-icon">🔓</div>
-        <h2 class="title">정답.</h2>
-        <p class="desc" style="background: none; border: none; font-size: 16px; color: #ffeed3;">진실에 가까워지고 있습니다.<br>다음 단서로 이동</p>
+        <h2 class="title" style="font-size: 26px;">정답.</h2>
+        <p class="desc" style="background: none; border: none; font-size: 16.5px; color: #ffeed3; line-height: 1.7;">
+          진실에 가까워지고 있습니다.<br>
+          <span id="cluePieceNotice" style="color: #fcd34d; font-weight: 700; font-size: 17.5px;"></span>
+        </p>
       </div>
       <button class="btn" onclick="nextQuizStep()">다음 단서로 이동</button>
     </div>
 
-    <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 -->
+    <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 (배경색 변경 화면) -->
     <div id="view-corner-master" class="view">
-      <div style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;" id="cornerClueBadge">코너 단서 확인</div>
-      <h2 class="title" id="cornerMasterTitle">오프라인 단서를 입력하세요</h2>
-      <p class="desc">현재 코너의 모든 문제를 풀었습니다!<br>진행 요원 또는 현장에서 오프라인으로 획득한 <span class="highlight">글자 단서</span>를 입력해 주세요.<br><br><b>단서를 풀어야 다음 그룹으로 이동할 수 있습니다.</b></p>
+      <div style="font-size: 13.5px; color: #f43f5e; font-weight: 800; margin-bottom: 8px;" id="cornerClueBadge">코너 단서 확인</div>
+      <h2 class="title" id="cornerMasterTitle">단서 조각 취합</h2>
+      <p class="desc" id="cornerMasterDesc" style="background: rgba(0,0,0,0.35); border-color: rgba(244,63,94,0.3); font-size: 15.5px; line-height: 1.75;">
+        <!-- 동적 안내 문구 -->
+      </p>
       
       <div style="margin-top: auto;">
         <input type="text" id="cornerInput" placeholder="단서 글자를 입력하세요" autocomplete="off" autocapitalize="off">
         <div class="error-msg" id="cornerError"></div>
-        <button class="btn" onclick="checkCorner()">단서 검증하기</button>
+        <button class="btn" style="background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #f43f5e;" onclick="checkCorner()">단서 검증하기</button>
       </div>
     </div>
 
-    <!-- 5. 코너 클리어 (다음 코너 이동 안내) 뷰 -->
+    <!-- 5. 코너 클리어 뷰 -->
     <div id="view-corner-result" class="view" style="justify-content: center;">
       <div class="result-box">
         <div class="result-icon">📜</div>
@@ -340,7 +411,7 @@
   </div>
 
   <script>
-    // --- 1. 코너별 문제 세팅 ---
+    // --- 1. 코너별 문제 데이터 ---
     const cornerData = {
       // 코너 A: 자현 (4문제)
       'A': {
@@ -449,9 +520,12 @@
       { step: 4, clue: "변화" }
     ];
 
+    // 단서 순번 명칭
+    const clueNames = ["첫 번째 단서", "두 번째 단서", "세 번째 단서", "마지막 단서"];
+
     // --- 2. 상태 관리 변수 ---
     let myRoute = []; 
-    let currentCornerIdx = 0;
+    let currentCornerIdx = 0; // 0, 1, 2, 3번째 방문 코너
     let currentQuizIdx = 0;
     let collectedFinalClues = [];
 
@@ -459,6 +533,15 @@
     function switchView(viewId) {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
       document.getElementById(viewId).classList.add('active');
+    }
+
+    function setSpecialMode(isSpecial) {
+      const container = document.getElementById('appContainer');
+      if (isSpecial) {
+        container.classList.add('special-mode');
+      } else {
+        container.classList.remove('special-mode');
+      }
     }
 
     function showError(inputId, msgId, message) {
@@ -478,6 +561,10 @@
     }
 
     // --- 4. 게임 로직 ---
+    function goGroupSelect() {
+      switchView('view-group');
+    }
+
     function startGame(group) {
       const groupNames = {
         1: "윤현 코순",
@@ -485,12 +572,16 @@
         3: "소영 코순"
       };
 
+      // 윤현: A -> B -> C -> D
+      // 보라: D -> A -> B -> C (요청 반영)
+      // 소영: C -> D -> A -> B
       if (group === 1) myRoute = ['A', 'B', 'C', 'D'];
-      if (group === 2) myRoute = ['B', 'C', 'D', 'A'];
+      if (group === 2) myRoute = ['D', 'A', 'B', 'C'];
       if (group === 3) myRoute = ['C', 'D', 'A', 'B'];
 
       document.getElementById('groupIndicator').textContent = `🚩 ${groupNames[group]}`;
       document.getElementById('gameHeader').style.display = 'block';
+      setSpecialMode(false);
       loadQuiz();
     }
 
@@ -499,6 +590,7 @@
       const corner = cornerData[cornerId];
       const quiz = corner.questions[currentQuizIdx];
 
+      // 총 14문제 진행률
       let totalSolved = 0;
       for (let i = 0; i < currentCornerIdx; i++) totalSolved += cornerData[myRoute[i]].questions.length;
       totalSolved += currentQuizIdx;
@@ -509,12 +601,14 @@
       document.getElementById('questionDesc').textContent = quiz.desc;
       
       clearInput('quizInput', 'quizError');
+      setSpecialMode(false);
       switchView('view-quiz');
     }
 
     function checkQuiz() {
       const cornerId = myRoute[currentCornerIdx];
-      const quiz = cornerData[cornerId].questions[currentQuizIdx];
+      const corner = cornerData[cornerId];
+      const quiz = corner.questions[currentQuizIdx];
       
       const input = document.getElementById('quizInput').value
         .trim()
@@ -529,6 +623,25 @@
       );
 
       if (validAnswers.includes(input)) {
+        // 단서 및 조각 명칭 계산 (요청 4번 반영)
+        const curClueName = clueNames[currentCornerIdx]; // 첫 번째 단서, 두 번째 단서...
+        const totalQ = corner.questions.length;
+        let curPieceName = "";
+
+        if (totalQ === 3) {
+          // 3문제 코너: 첫 번째 조각 / 두 번째 조각 / 마지막 조각
+          if (currentQuizIdx === 0) curPieceName = "첫 번째 조각";
+          else if (currentQuizIdx === 1) curPieceName = "두 번째 조각";
+          else curPieceName = "마지막 조각";
+        } else {
+          // 4문제 코너: 첫 번째 조각 / 두 번째 조각 / 세 번째 조각 / 마지막 조각
+          if (currentQuizIdx === 0) curPieceName = "첫 번째 조각";
+          else if (currentQuizIdx === 1) curPieceName = "두 번째 조각";
+          else if (currentQuizIdx === 2) curPieceName = "세 번째 조각";
+          else curPieceName = "마지막 조각";
+        }
+
+        document.getElementById('cluePieceNotice').textContent = `"${curClueName}의 ${curPieceName}을 받으세요."`;
         switchView('view-quiz-result');
       } else {
         showError('quizInput', 'quizError', '정답이 일치하지 않습니다. 다시 확인해 보세요.');
@@ -543,9 +656,16 @@
       if (currentQuizIdx < corner.questions.length) {
         loadQuiz();
       } else {
-        const stageNum = currentCornerIdx + 1;
-        document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${stageNum}번째 단서)`;
-        document.getElementById('cornerMasterTitle').textContent = `${stageNum}번째 단서를 입력하세요`;
+        // 코너 마지막 문제를 푼 다음 화면 (요청 5번 반영: 배경색 차별화 + 문구 적용)
+        setSpecialMode(true);
+        const curClueName = clueNames[currentCornerIdx];
+        document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${curClueName})`;
+        document.getElementById('cornerMasterTitle').textContent = `${curClueName}을 풀어주세요`;
+        document.getElementById('cornerMasterDesc').innerHTML = `
+          <b>${curClueName}의 조각들이 다 모였습니다.</b><br>
+          모든 조각을 합쳐서 단서를 풀어주세요.<br><br>
+          <span style="color:#f43f5e; font-weight:700;">※ 단서를 풀어야 다음 그룹으로 이동할 수 있습니다.</span>
+        `;
         clearInput('cornerInput', 'cornerError');
         switchView('view-corner-master');
       }
@@ -556,6 +676,7 @@
       const expectedClue = stageClues[currentCornerIdx].clue;
 
       if (input === expectedClue) {
+        // 단서 해독 성공 (정답 화면은 배경색 유지)
         document.getElementById('cornerFinalClue').textContent = expectedClue;
         collectedFinalClues.push(expectedClue);
         
@@ -567,6 +688,8 @@
     }
 
     function goToNextCorner() {
+      // 다음 코너 이동 시 배경색 원래대로 복귀
+      setSpecialMode(false);
       currentCornerIdx++;
       currentQuizIdx = 0;
 
