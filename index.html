@@ -53,7 +53,7 @@
       box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(225, 29, 72, 0.25);
     }
 
-    /* 최종 암호 입력 & 최종 성공 화면 전용 특별 배경 (딥 나이트 & 골든 엠버 톤) */
+    /* 최종 암호 입력 & 최종 엔딩 전용 특별 배경 (딥 나이트 & 골든 엠버 톤) */
     .app-container.final-mode {
       background: radial-gradient(circle at top, rgba(30, 27, 75, 0.95) 0%, rgba(10, 10, 26, 0.98) 100%);
       border: 1.5px solid rgba(250, 204, 21, 0.65);
@@ -193,7 +193,7 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.4); 
     }
 
-    /* 4자리 빈칸 입력 박스 스타일 (게이트용) */
+    /* 4자리 빈칸 입력 박스 스타일 (게이트/잠금화면 공용) */
     .code-input-container {
       display: flex;
       justify-content: center;
@@ -413,20 +413,21 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.8); 
     }
 
+    /* 데시벨 측정 전용 스타일 */
     .proclamation-box {
       background: rgba(15, 23, 42, 0.85);
       border-radius: 18px;
       border: 1.5px solid rgba(250, 204, 21, 0.4);
-      padding: 18px 16px;
-      margin-top: 10px;
+      padding: 22px 16px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      margin-top: 10px;
     }
     
     .decibel-meter {
-      margin: 16px 0 12px 0;
+      margin: 20px 0 16px 0;
     }
     .db-value-display {
-      font-size: 42px;
+      font-size: 46px;
       font-weight: 900;
       color: #fde047;
       text-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
@@ -434,14 +435,14 @@
       margin-bottom: 4px;
     }
     .db-target-label {
-      font-size: 13.5px;
+      font-size: 14px;
       font-weight: 700;
       color: #fcd34d;
       margin-bottom: 12px;
     }
     .db-bar-container {
       width: 100%;
-      height: 16px;
+      height: 18px;
       background: rgba(0, 0, 0, 0.5);
       border-radius: 10px;
       overflow: hidden;
@@ -464,43 +465,43 @@
       box-shadow: 0 0 6px #fff;
     }
 
+    /* 식당 전용 독립 카드 스타일 */
     .restaurant-card {
-      display: none;
       background: linear-gradient(145deg, rgba(20, 29, 52, 0.95), rgba(10, 15, 30, 0.98));
       border: 1.5px solid #10b981;
       border-radius: 20px;
-      padding: 22px 18px;
-      margin-top: 16px;
-      animation: fadeIn 0.5s ease;
+      padding: 24px 18px;
+      margin: 16px 0;
       box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25);
     }
     .restaurant-title {
-      font-size: 22px;
+      font-size: 24px;
       font-weight: 900;
       color: #6ee7b7;
       margin-bottom: 8px;
       text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);
     }
     .restaurant-address {
-      font-size: 14.5px;
+      font-size: 15px;
       color: #e2e8f0;
       line-height: 1.6;
       word-break: keep-all;
-      margin-bottom: 18px;
-      background: rgba(0,0,0,0.3);
-      padding: 10px;
-      border-radius: 10px;
+      margin-bottom: 20px;
+      background: rgba(0,0,0,0.35);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(110, 231, 183, 0.2);
     }
     .map-btn {
       display: inline-block;
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       background: #03c75a;
       color: #ffffff;
-      font-size: 16px;
+      font-size: 16.5px;
       font-weight: 800;
       text-decoration: none;
-      border-radius: 14px;
+      border-radius: 16px;
       box-shadow: 0 4px 15px rgba(3, 199, 90, 0.35);
       transition: 0.2s;
     }
@@ -663,14 +664,14 @@
       </div>
     </div>
 
-    <!-- 7. 최종 성공 화면: 성경구절 유지 + 최종 선포 미션(90dB 달성 시 식당 공개) -->
+    <!-- 7. 최종 축하 화면: 성경구절 + 집결지 집결 안내 -->
     <div id="view-success" class="view" style="text-align: center; overflow-y: auto;">
       <div class="result-icon" style="margin-top: 6px;">✨</div>
       <h1 style="font-size: 30px; font-weight: 900; color: #fde047; margin-bottom: 14px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.7); word-break: keep-all;">
         그리스도의 부활
       </h1>
 
-      <!-- 성경 구절 카드 (유지) -->
+      <!-- 성경 구절 카드 -->
       <div class="bible-card">
         <div class="bible-ref">📖 요한복음 11장 25-26절</div>
         <div class="bible-text">
@@ -678,14 +679,53 @@
         </div>
       </div>
 
-      <!-- 최종 선포 미션 카드 -->
-      <div class="proclamation-box" id="proclamationSection">
+      <div style="margin-top: 10px; padding: 20px 16px; background: rgba(15, 23, 42, 0.85); border-radius: 18px; border: 1.5px solid rgba(250, 204, 21, 0.45); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);">
+        <p style="font-size: 16.5px; color: #fef08a; line-height: 1.7; word-break: keep-all;">
+          축하합니다! 4가지 증거를 모두 밝혀냈습니다.<br><br>
+          <span style="color: #6ee7b7; font-weight: 800; font-size: 18px; text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);">
+            이제 신속히 집결지로 다시 모여서<br>최종 관문을 통과해주세요!
+          </span>
+        </p>
+      </div>
+
+      <button class="btn" style="margin-top: auto; padding: 18px;" onclick="goToRallyGate()">
+        집결지 최종 관문으로 이동
+      </button>
+    </div>
+
+    <!-- 8. [신규] 집결지 잠금화면 (목사님 생일: 1220 입력) -->
+    <div id="view-rally-gate" class="view">
+      <div style="font-size: 13.5px; color: #facc15; font-weight: 800; margin-bottom: 8px;">집결지 도착 확인</div>
+      <h2 class="title" style="color: #fffbeb;">최종 관문 잠금 해제</h2>
+      <p class="desc">
+        집결지에 모든 코순원이 모였습니까?<br>
+        목사님의 특별 암호를 입력하여 마지막 선포 미션을 시작하세요!
+      </p>
+
+      <div style="margin-top: auto;">
+        <div class="code-input-container">
+          <input type="text" maxlength="1" class="code-box" id="rallyDigit1" inputmode="numeric" autocomplete="off" oninput="handleRallyCodeInput(this, 1)" onkeydown="handleRallyCodeKeydown(event, 1)">
+          <input type="text" maxlength="1" class="code-box" id="rallyDigit2" inputmode="numeric" autocomplete="off" oninput="handleRallyCodeInput(this, 2)" onkeydown="handleRallyCodeKeydown(event, 2)">
+          <input type="text" maxlength="1" class="code-box" id="rallyDigit3" inputmode="numeric" autocomplete="off" oninput="handleRallyCodeInput(this, 3)" onkeydown="handleRallyCodeKeydown(event, 3)">
+          <input type="text" maxlength="1" class="code-box" id="rallyDigit4" inputmode="numeric" autocomplete="off" oninput="handleRallyCodeInput(this, 4)" onkeydown="handleRallyCodeKeydown(event, 4)">
+        </div>
+        <div class="error-msg" id="rallyGateError"></div>
+        <button class="btn" onclick="checkRallyGateCode()">잠금 해제 및 선포 미션 시작</button>
+      </div>
+    </div>
+
+    <!-- 9. [신규] 데시벨 측정 선포 미션 전용 화면 -->
+    <div id="view-proclamation" class="view" style="text-align: center; overflow-y: auto;">
+      <div class="result-icon" style="margin-top: 6px;">📢</div>
+      <h1 style="font-size: 26px; font-weight: 900; color: #fde047; margin-bottom: 12px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.7); word-break: keep-all;">
+        마지막 선포 미션
+      </h1>
+
+      <div class="proclamation-box">
         <p style="font-size: 15.5px; color: #fef08a; line-height: 1.65; word-break: keep-all; margin-bottom: 12px;">
-          4가지 단서를 모두 풀어 진실을 밝혀냈습니다!<br>
-          <b>이제 신속히 집결지로 모여주세요.</b><br><br>
-          코순원들과 함께 모여 진실을 세상에 외칠 준비가 되셨나요?<br>
-          한목소리로 <span style="color: #6ee7b7; font-weight: 900; font-size: 16.5px;">"그리스도의 부활"</span>을 크게 외쳐<br>
-          <b>90dB</b>을 넘기면 오늘의 식당 위치가 열립니다!
+          코순원들과 함께 한목소리로<br>
+          <span style="color: #6ee7b7; font-weight: 900; font-size: 19px;">"그리스도의 부활!"</span><br>
+          을 크게 외쳐 <b>90dB</b>을 넘겨주세요!
         </p>
 
         <!-- 데시벨 측정기 UI -->
@@ -698,27 +738,34 @@
           </div>
         </div>
 
-        <button class="btn" id="micBtn" style="padding: 14px; margin-top: 10px;" onclick="startAudioMeasurement()">
+        <button class="btn" id="micBtn" style="padding: 16px; margin-top: 10px;" onclick="startAudioMeasurement()">
           🎤 선포 준비 (마이크 켜기)
         </button>
-        <button class="btn-secondary" style="font-size: 12.5px; padding: 8px; margin-top: 8px;" onclick="unlockRestaurant()">
-          마이크 연결이 어렵다면 여기를 눌러 완료
+        <button class="btn-secondary" style="font-size: 12.5px; padding: 8px; margin-top: 10px;" onclick="unlockRestaurant()">
+          마이크 연결이 어렵다면 여기를 눌러 통과
         </button>
       </div>
+    </div>
 
-      <!-- 90dB 달성 시 나타나는 청담미역 식당 안내 카드 -->
-      <div class="restaurant-card" id="restaurantCard">
-        <div style="font-size: 38px; margin-bottom: 8px;">🍲</div>
+    <!-- 10. [신규] 최종 일용할 양식(식당) 오픈 화면 -->
+    <div id="view-final-restaurant" class="view" style="text-align: center; justify-content: center; overflow-y: auto;">
+      <div class="result-icon" style="margin-top: 6px;">🍲</div>
+      <h1 style="font-size: 28px; font-weight: 900; color: #fde047; margin-bottom: 10px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.7); word-break: keep-all;">
+        일용할 양식의 자리
+      </h1>
+      
+      <div class="restaurant-card">
         <div class="restaurant-title">청담미역 청담점</div>
-        <p style="font-size: 14px; color: #6ee7b7; font-weight: 700; margin-bottom: 12px;">
-          🎉 선포 미션 성공! 일용할 양식이 준비된 곳으로 오세요.
+        <p style="font-size: 14.5px; color: #6ee7b7; font-weight: 700; margin-bottom: 16px;">
+          🎉 모든 관문을 통과하셨습니다!<br>
+          함께 땀 흘린 코순원들과 함께 맛있는 식사 자리로 이동해 주세요.
         </p>
         <div class="restaurant-address">
-          📍 <b>주소</b><br>
+          📍 <b>식당 주소</b><br>
           서울 강남구 영동대로137길 6 1층 청담미역
         </div>
         <a href="https://naver.me/FjbngY2u" target="_blank" rel="noopener noreferrer" class="map-btn">
-          📍 네이버 지도로 위치 확인하기
+          📍 네이버 지도로 길찾기
         </a>
       </div>
     </div>
@@ -812,7 +859,7 @@
         ]
       },
 
-      // 코너 D: 노아 (4문제로 확장, 코드: 0422)
+      // 코너 D: 노아 (4문제, 코드: 0422)
       'D': {
         name: '코너 D (노아)',
         npcCode: '0422',
@@ -852,6 +899,9 @@
     // 단서 순번 명칭
     const clueNames = ["첫 번째 단서", "두 번째 단서", "세 번째 단서", "마지막 단서"];
 
+    // 집결지 잠금화면 정답 (목사님 생일)
+    const RALLY_PASSCODE = "1220";
+
     // --- 2. 상태 관리 변수 ---
     let myRoute = []; 
     let currentCornerIdx = 0;
@@ -866,7 +916,7 @@
     let animationFrameId = null;
     let isMissionAccomplished = false;
 
-    // 전체 문제 수 계산 헬퍼 (각 4문제씩 총 16문제)
+    // 전체 문제 수 계산 헬퍼
     function getTotalQuestionCount() {
       return Object.values(cornerData).reduce((sum, c) => sum + c.questions.length, 0);
     }
@@ -877,7 +927,6 @@
       document.getElementById(viewId).classList.add('active');
     }
 
-    // 코너 단서 취합용 다크 버건디 모드
     function setSpecialMode(isSpecial) {
       const container = document.getElementById('appContainer');
       if (isSpecial) {
@@ -888,7 +937,6 @@
       }
     }
 
-    // 최종 미션 및 엔딩 전용 딥 네이비 & 로얄 골드 모드
     function setFinalMode(isFinal) {
       const container = document.getElementById('appContainer');
       if (isFinal) {
@@ -947,6 +995,37 @@
         el.classList.remove('error');
       }
       document.getElementById('gateError').textContent = '';
+    }
+
+    // 4자리 숫자 빈칸 입력 제어 (집결지 잠금화면용)
+    function handleRallyCodeInput(current, index) {
+      if (current.value.length === 1) {
+        if (index < 4) {
+          document.getElementById(`rallyDigit${index + 1}`).focus();
+        }
+      }
+    }
+
+    function handleRallyCodeKeydown(event, index) {
+      if (event.key === 'Backspace' && !event.target.value) {
+        if (index > 1) {
+          const prev = document.getElementById(`rallyDigit${index - 1}`);
+          prev.focus();
+          prev.value = '';
+        }
+      }
+    }
+
+    function resetRallyGateInputs() {
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById(`rallyDigit${i}`);
+        if (el) {
+          el.value = '';
+          el.classList.remove('error');
+        }
+      }
+      const err = document.getElementById('rallyGateError');
+      if (err) err.textContent = '';
     }
 
     function toggleFinalHint() {
@@ -1162,7 +1241,7 @@
       }
     }
 
-    // 최종 정답 검증 (띄어쓰기 유무 상관없이 통과)
+    // 최종 정답 검증 (그리스도의 부활)
     function checkFinal() {
       const rawInput = document.getElementById('finalInput').value;
       const cleanedInput = rawInput.trim().replace(/\s+/g, '');
@@ -1183,6 +1262,44 @@
         if (finalFailCount >= 2) {
           document.getElementById('finalHintBtn').style.display = 'inline-flex';
         }
+      }
+    }
+
+    // --- 5. 집결지 잠금화면 & 데시벨 & 식당 화면 전환 로직 ---
+    function goToRallyGate() {
+      setFinalMode(true);
+      resetRallyGateInputs();
+      switchView('view-rally-gate');
+      setTimeout(() => {
+        const first = document.getElementById('rallyDigit1');
+        if (first) first.focus();
+      }, 300);
+    }
+
+    function checkRallyGateCode() {
+      const d1 = document.getElementById('rallyDigit1').value.trim();
+      const d2 = document.getElementById('rallyDigit2').value.trim();
+      const d3 = document.getElementById('rallyDigit3').value.trim();
+      const d4 = document.getElementById('rallyDigit4').value.trim();
+      const entered = `${d1}${d2}${d3}${d4}`;
+
+      if (entered.length < 4) {
+        document.getElementById('rallyGateError').textContent = '4자리 코드를 모두 입력해 주세요.';
+        return;
+      }
+
+      if (entered === RALLY_PASSCODE) {
+        // 목사님 생일 1220 일치 -> 데시벨 미션 화면으로 이동!
+        switchView('view-proclamation');
+      } else {
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`rallyDigit${i}`);
+          el.classList.remove('error');
+          void el.offsetWidth;
+          el.classList.add('error');
+        }
+        document.getElementById('rallyGateError').textContent = '코드가 일치하지 않습니다. 다시 확인하세요.';
+        if (navigator.vibrate) navigator.vibrate(200);
       }
     }
 
@@ -1234,6 +1351,7 @@
           const percentage = Math.min(100, Math.max(0, (approxDb / 100) * 100));
           document.getElementById('dbBar').style.width = `${percentage}%`;
 
+          // 90dB 돌파 시 식당 오픈!
           if (approxDb >= 90) {
             unlockRestaurant();
             return;
@@ -1246,10 +1364,11 @@
 
       } catch (err) {
         console.error("마이크 접근 오류:", err);
-        alert("마이크 접근 권한이 필요합니다. 권한을 허용해주시거나 아래 대체 완료 버튼을 이용해 주세요.");
+        alert("마이크 접근 권한이 필요합니다. 권한을 허용해주시거나 아래 대체 버튼을 이용해 주세요.");
       }
     }
 
+    // 90dB 돌파 또는 수동 통과 시 식당 독립 화면 오픈
     function unlockRestaurant() {
       if (isMissionAccomplished) return;
       isMissionAccomplished = true;
@@ -1264,12 +1383,8 @@
 
       if (navigator.vibrate) navigator.vibrate([200, 100, 300]);
 
-      const meterBox = document.getElementById('proclamationSection');
-      meterBox.style.display = 'none';
-
-      const restaurantCard = document.getElementById('restaurantCard');
-      restaurantCard.style.display = 'block';
-      restaurantCard.scrollIntoView({ behavior: 'smooth' });
+      // 데시벨 미션 통과 후 최종 식당 화면 오픈
+      switchView('view-final-restaurant');
     }
   </script>
 </body>
