@@ -193,7 +193,7 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.4); 
     }
 
-    /* 4자리 빈칸 입력 박스 스타일 */
+    /* 4자리 빈칸 입력 박스 스타일 (게이트용) */
     .code-input-container {
       display: flex;
       justify-content: center;
@@ -225,6 +225,90 @@
       animation: shake 0.4s;
     }
 
+    /* 7자리 최종 암호 박스 스타일 (앞 5글자 + 공백 + 뒤 2글자) */
+    .final-code-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px; /* 띄어쓰기 간격 */
+      margin: 24px 0 16px 0;
+    }
+    .final-code-group {
+      display: flex;
+      gap: 6px;
+    }
+    .final-code-box {
+      width: 44px;
+      height: 54px;
+      padding: 0;
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      border-radius: 12px;
+      border: 2px solid #ca8a04;
+      background: rgba(23, 23, 42, 0.88);
+      color: #fef08a;
+      outline: none;
+      transition: all 0.2s;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+    }
+    .final-code-box:focus {
+      border-color: #facc15;
+      background: rgba(30, 27, 75, 0.98);
+      box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+      transform: translateY(-2px);
+    }
+    .final-code-box.error {
+      border-color: #ef4444;
+      animation: shake 0.4s;
+    }
+
+    /* [신규] 힌트 버튼 및 힌트 카드 스타일 */
+    .hint-trigger-btn {
+      background: rgba(250, 204, 21, 0.15);
+      border: 1px solid rgba(250, 204, 21, 0.6);
+      color: #fef08a;
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin: 8px auto 14px auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+    .hint-trigger-btn:active {
+      background: rgba(250, 204, 21, 0.3);
+      transform: scale(0.97);
+    }
+
+    .hint-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1.5px dashed rgba(250, 204, 21, 0.7);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+    .hint-box .hint-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #facc15;
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+    .hint-box .hint-content {
+      font-size: 16px;
+      font-weight: 800;
+      color: #6ee7b7;
+      letter-spacing: 0.5px;
+      word-break: keep-all;
+    }
+
     .btn { 
       width: 100%; 
       padding: 18px; 
@@ -242,6 +326,39 @@
     .btn:active { 
       transform: scale(0.98); 
       background: linear-gradient(135deg, #92400e, #5b210b); 
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 14px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #d1c0ab;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 14px;
+      font-size: 14.5px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.2s;
+    }
+    .btn-secondary:active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .corner-quick-link {
+      font-size: 12px;
+      font-weight: 800;
+      color: #fcd34d;
+      background: rgba(245, 158, 11, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.5);
+      padding: 4px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .corner-quick-link:active {
+      background: rgba(245, 158, 11, 0.35);
     }
 
     .inventory { 
@@ -330,7 +447,7 @@
       font-weight: 600; 
       text-align: center; 
       min-height: 20px; 
-      margin-bottom: 10px; 
+      margin-bottom: 8px; 
       text-shadow: 0 1px 4px rgba(0,0,0,0.8); 
     }
 
@@ -407,7 +524,10 @@
 
     <!-- 2. 일반 문제 풀이 뷰 -->
     <div id="view-quiz" class="view">
-      <div id="cornerBadge" style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;">코너 A - 1번 미션</div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <div id="cornerBadge" style="font-size: 13.5px; color: #f59e0b; font-weight: 800;">코너 A - 1번 미션</div>
+        <button class="corner-quick-link" onclick="openCornerMasterDirect()">🔑 코너 단서 입력</button>
+      </div>
       <h2 class="title" id="questionTitle">문제</h2>
       <div class="desc" id="questionDesc">문제 설명</div>
       
@@ -428,7 +548,7 @@
           <span id="cluePieceNotice" style="color: #fcd34d; font-weight: 700; font-size: 17.5px;"></span>
         </p>
       </div>
-      <button class="btn" onclick="nextQuizStep()">다음 단서로 이동</button>
+      <button class="btn" onclick="nextQuizStep()">다음 단계로 이동</button>
     </div>
 
     <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 (다크 버건디 톤 배경) -->
@@ -443,6 +563,7 @@
         <input type="text" id="cornerInput" placeholder="단서 글자를 입력하세요" autocomplete="off" autocapitalize="off">
         <div class="error-msg" id="cornerError"></div>
         <button class="btn" style="background: linear-gradient(135deg, #e11d48, #9f1239); border-color: #f43f5e;" onclick="checkCorner()">단서 검증하기</button>
+        <button class="btn-secondary" onclick="backToQuiz()">← 문제 풀이로 돌아가기</button>
       </div>
     </div>
 
@@ -465,9 +586,34 @@
       <h2 class="title" style="color: #fffbeb;">모든 단서/증거 수집 완료!</h2>
       <p class="desc">지금까지 수집한 4개의 단서/증거(시체, 수의, 증인, 변화)가 가리키는 궁극적인 <span class="highlight" style="color: #fde047; text-shadow: 0 0 8px rgba(250,204,21,0.6);">진실</span>은 무엇일까요?</p>
       
-      <div style="margin-top: auto;">
-        <input type="text" id="finalInput" placeholder="최종 암호를 입력하세요" autocomplete="off" autocapitalize="off">
-        <div class="error-msg" id="finalError"></div>
+      <div style="margin-top: auto; display: flex; flex-direction: column; align-items: center; width: 100%;">
+        <!-- 7자리 분할 빈칸 입력창: 앞 5자리 + 간격 + 뒤 2자리 -->
+        <div class="final-code-wrapper">
+          <div class="final-code-group">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit1" autocomplete="off" oninput="handleFinalInput(this, 1)" onkeydown="handleFinalKeydown(event, 1)">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit2" autocomplete="off" oninput="handleFinalInput(this, 2)" onkeydown="handleFinalKeydown(event, 2)">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit3" autocomplete="off" oninput="handleFinalInput(this, 3)" onkeydown="handleFinalKeydown(event, 3)">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit4" autocomplete="off" oninput="handleFinalInput(this, 4)" onkeydown="handleFinalKeydown(event, 4)">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit5" autocomplete="off" oninput="handleFinalInput(this, 5)" onkeydown="handleFinalKeydown(event, 5)">
+          </div>
+          <div class="final-code-group">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit6" autocomplete="off" oninput="handleFinalInput(this, 6)" onkeydown="handleFinalKeydown(event, 6)">
+            <input type="text" maxlength="1" class="final-code-box" id="finalDigit7" autocomplete="off" oninput="handleFinalInput(this, 7)" onkeydown="handleFinalKeydown(event, 7)">
+          </div>
+        </div>
+
+        <div class="error-msg" id="finalError" style="width: 100%;"></div>
+
+        <!-- [신규] 2번 틀리면 나타나는 힌트 버튼 및 힌트 카드 -->
+        <button id="finalHintBtn" class="hint-trigger-btn" style="display: none;" onclick="toggleFinalHint()">
+          💡 힌트 보기
+        </button>
+
+        <div id="finalHintCard" class="hint-box" style="display: none; width: 100%;">
+          <div class="hint-title">🗝️ FINAL CLUE HINT</div>
+          <div class="hint-content">Greece(3) Morality(2) Father(1) Bow(1)</div>
+        </div>
+
         <button class="btn" onclick="checkFinal()">단 하나의 진실 봉인 해제</button>
       </div>
     </div>
@@ -514,7 +660,7 @@
           },
           { 
             title: "문제 2. 기묘한 등식",
-            desc: "EKANS = 0\nTNA = 6\nRIAHC = 4\nTAC = 4\nHAON = ?",
+            desc: "RIAHC = 4\nTAC = 4\nELBAT = 4\nHAON = ?",
             answers: ["2"]
           },
           { 
@@ -575,8 +721,8 @@
           },
           { 
             title: "4. 네 자리 암호",
-            desc: "규칙을 찾아 네 자리 암호를 완성하라.\n\n9634 = ○XX○\n4528 = ○X○X\n0192 = XX○●\n1793 = X○○X\n\n(●: 숫자와 위치 일치 / ○: 숫자는 있으나 다른 위치 / X: 포함되지 않음)",
-            answers: ["7942"]
+            desc: "규칙을 찾아 네 자리 암호를 완성하라.\n\n9634 = ○XX○\n4528 = ○X○X\n0197 = ●X○X\n1093 = X○○X\n\n(●: 숫자와 위치 일치 / ○: 숫자는 있으나 다른 위치 / X: 포함되지 않음)",
+            answers: ["0942"]
           }
         ]
       },
@@ -588,7 +734,7 @@
         questions: [
           { 
             title: "1. 머릿돌의 비밀",
-            desc: "마가복음 12장\nA: 팔각정은 건축자들이 버린 ○ 몇개로 지어졌는지?\nB: 그리고 팔각정은 예수님이 태어나신 이후 몇 년에 지어졌는지?\n\nB / A = ?",
+            desc: "마가복음 12장\nA: 물건을 버린 집 짓는 사람들의 총원은? (사람 1명당 1개씩만 버렸다)\nB: 그리고 그 버린 물건은 예수님이 태어나신 이후 몇 년 만에 귀한 대접을 받았나?\n\nB / A = ?",
             answers: ["505"]
           },
           { 
@@ -621,6 +767,7 @@
     let currentCornerIdx = 0;
     let currentQuizIdx = 0;
     let collectedFinalClues = [];
+    let finalFailCount = 0; // [신규] 최종 미션 실패 횟수
 
     // --- 3. UI 헬퍼 함수 ---
     function switchView(viewId) {
@@ -672,7 +819,7 @@
       if (msg) msg.textContent = '';
     }
 
-    // 4자리 빈칸 입력 제어 로직
+    // 4자리 빈칸 입력 제어 로직 (게이트용)
     function handleCodeInput(current, index) {
       if (current.value.length === 1) {
         if (index < 4) {
@@ -698,6 +845,54 @@
         el.classList.remove('error');
       }
       document.getElementById('gateError').textContent = '';
+    }
+
+    // 7글자 최종 암호 빈칸 제어 로직
+    function handleFinalInput(current, index) {
+      if (current.value.length >= 1) {
+        if (index < 7) {
+          document.getElementById(`finalDigit${index + 1}`).focus();
+        }
+      }
+    }
+
+    function handleFinalKeydown(event, index) {
+      if (event.key === 'Backspace' && !event.target.value) {
+        if (index > 1) {
+          const prev = document.getElementById(`finalDigit${index - 1}`);
+          prev.focus();
+          prev.value = '';
+        }
+      }
+    }
+
+    function resetFinalInputs() {
+      for (let i = 1; i <= 7; i++) {
+        const el = document.getElementById(`finalDigit${i}`);
+        if (el) {
+          el.value = '';
+          el.classList.remove('error');
+        }
+      }
+      const err = document.getElementById('finalError');
+      if (err) err.textContent = '';
+      
+      finalFailCount = 0;
+      document.getElementById('finalHintBtn').style.display = 'none';
+      document.getElementById('finalHintCard').style.display = 'none';
+    }
+
+    // [신규] 힌트 열기/닫기 토글
+    function toggleFinalHint() {
+      const hintCard = document.getElementById('finalHintCard');
+      const hintBtn = document.getElementById('finalHintBtn');
+      if (hintCard.style.display === 'none') {
+        hintCard.style.display = 'block';
+        hintBtn.textContent = '💡 힌트 접기';
+      } else {
+        hintCard.style.display = 'none';
+        hintBtn.textContent = '💡 힌트 보기';
+      }
     }
 
     // --- 4. 게임 로직 ---
@@ -839,20 +1034,33 @@
       if (currentQuizIdx < corner.questions.length) {
         loadQuiz();
       } else {
-        // 코너 마지막 문제를 푼 다음 오프라인 단서 화면 진입 (다크 버건디 모드 활성화)
-        setSpecialMode(true);
-        setFinalMode(false);
-        const curClueName = clueNames[currentCornerIdx];
-        document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${curClueName})`;
-        document.getElementById('cornerMasterTitle').textContent = `${curClueName}를 풀어주세요`;
-        document.getElementById('cornerMasterDesc').innerHTML = `
-          <b>${curClueName}의 조각들이 다 모였습니다.</b><br>
-          모든 조각을 합쳐서 단서를 풀어주세요.<br><br>
-          <span style="color:#f43f5e; font-weight:700;">※ 단서를 풀어야 다음 코너로 이동할 수 있습니다.</span>
-        `;
-        clearInput('cornerInput', 'cornerError');
-        switchView('view-corner-master');
+        openCornerMasterDirect();
       }
+    }
+
+    // 문제를 푸는 도중 언제든지 코너 단서 입력 뷰로 즉시 이동
+    function openCornerMasterDirect() {
+      const cornerId = myRoute[currentCornerIdx];
+      const corner = cornerData[cornerId];
+      const curClueName = clueNames[currentCornerIdx];
+
+      setSpecialMode(true);
+      setFinalMode(false);
+      document.getElementById('cornerClueBadge').textContent = `${corner.name} (${curClueName})`;
+      document.getElementById('cornerMasterTitle').textContent = `${curClueName}를 풀어주세요`;
+      document.getElementById('cornerMasterDesc').innerHTML = `
+        <b>${curClueName}의 조각들을 조합하여 단서를 입력하세요.</b><br>
+        문제를 다 풀지 못했더라도 유추한 단서가 있다면 바로 검증할 수 있습니다.<br><br>
+        <span style="color:#f43f5e; font-weight:700;">※ 단서를 맞춰야 다음 코너로 이동할 수 있습니다.</span>
+      `;
+      clearInput('cornerInput', 'cornerError');
+      switchView('view-corner-master');
+    }
+
+    // 단서 화면에서 다시 풀던 문제로 안전하게 돌아가기
+    function backToQuiz() {
+      setSpecialMode(false);
+      loadQuiz();
     }
 
     function checkCorner() {
@@ -878,24 +1086,52 @@
       if (currentCornerIdx < 4) {
         showCornerGate();
       } else {
-        // 4개 코너 모두 완료 -> 최종 암호 화면 진입 시 특별 배경(딥 나이트 & 골든 엠버) 적용
+        // 4개 코너 모두 완료 -> 최종 암호 화면 진입 시 특별 배경 적용
         document.getElementById('progressFill').style.width = '100%';
         setFinalMode(true);
-        clearInput('finalInput', 'finalError');
+        resetFinalInputs();
         switchView('view-final');
+        setTimeout(() => {
+          document.getElementById('finalDigit1').focus();
+        }, 300);
       }
     }
 
+    // [수정] 7개 칸에서 값을 취합하여 검증 및 오답 2회 시 힌트 버튼 노출
     function checkFinal() {
-      const input = document.getElementById('finalInput').value.trim().replace(/\s+/g, '');
-      const targetAnswer = "그리스도의부활";
+      let combined = "";
+      for (let i = 1; i <= 7; i++) {
+        combined += document.getElementById(`finalDigit${i}`).value.trim();
+      }
 
-      if (input === targetAnswer) {
-        // 최종 성공 화면에서도 특별 배경 유지
+      if (combined.length < 7) {
+        document.getElementById('finalError').textContent = '7글자 빈칸을 모두 채워주세요.';
+        if (navigator.vibrate) navigator.vibrate(200);
+        return;
+      }
+
+      // "그리스도의부활" 검증
+      if (combined === "그리스도의부활") {
         setFinalMode(true);
         switchView('view-success');
       } else {
-        showError('finalInput', 'finalError', '암호가 일치하지 않습니다. 4개의 단서가 가리키는 진실을 떠올려보세요.');
+        finalFailCount++;
+
+        for (let i = 1; i <= 7; i++) {
+          const el = document.getElementById(`finalDigit${i}`);
+          el.classList.remove('error');
+          void el.offsetWidth;
+          el.classList.add('error');
+        }
+        
+        document.getElementById('finalError').textContent = '암호가 일치하지 않습니다. 4개의 단서가 가리키는 진실을 떠올려보세요.';
+        
+        // 2번 이상 틀리면 힌트 보기 버튼 노출
+        if (finalFailCount >= 2) {
+          document.getElementById('finalHintBtn').style.display = 'inline-flex';
+        }
+
+        if (navigator.vibrate) navigator.vibrate(200);
       }
     }
   </script>
