@@ -13,7 +13,6 @@
       -webkit-tap-highlight-color: transparent; 
     }
     
-    /* 오래된 지도 배경 + 비네팅 효과 */
     body { 
       background-color: #120d08;
       background-image: 
@@ -29,11 +28,10 @@
       padding: 16px; 
     }
     
-    /* 고서적 탐험 수첩 느낌의 카드 레이아웃 */
     .app-container {
       width: 100%; 
       max-width: 440px; 
-      background: rgba(28, 22, 16, 0.90); 
+      background: rgba(28, 22, 16, 0.92); 
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(212, 175, 55, 0.35);
@@ -46,7 +44,6 @@
       min-height: 620px;
     }
 
-    /* 화면 전환 애니메이션 */
     .view { 
       display: none; 
       flex-direction: column; 
@@ -56,7 +53,6 @@
     }
     .view.active { display: flex; }
 
-    /* 텍스트 스타일 */
     .title { 
       font-size: 21px; 
       font-weight: 800; 
@@ -83,7 +79,6 @@
       font-weight: 700; 
     }
     
-    /* 양피지 톤 인풋 */
     input[type="text"] {
       width: 100%; 
       padding: 18px; 
@@ -112,7 +107,6 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
     }
 
-    /* 앤틱 브론즈 버튼 */
     .btn {
       width: 100%; 
       padding: 18px; 
@@ -132,7 +126,6 @@
       background: linear-gradient(135deg, #92400e, #5b210b); 
     }
 
-    /* 상단 인벤토리바 */
     .inventory {
       background: rgba(20, 15, 10, 0.95); 
       color: #d1b894; 
@@ -148,15 +141,15 @@
       display: inline-block; 
       background: #2a2016; 
       border: 1px solid #7c5e3f;
-      padding: 4px 10px; 
+      padding: 4px 8px; 
       border-radius: 8px; 
       margin-left: 4px; 
       color: #fcd34d; 
       font-weight: 800;
       box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+      font-size: 12.5px;
     }
 
-    /* 진행도 바 */
     .progress-bar { 
       height: 6px; 
       background: #2b2118; 
@@ -169,7 +162,6 @@
       transition: width 0.35s ease; 
     }
 
-    /* 팝업 결과창 */
     .result-box { 
       text-align: center; 
       padding: 20px 0; 
@@ -179,21 +171,40 @@
       margin-bottom: 16px; 
     }
     .big-clue { 
-      font-size: 44px; 
+      font-size: 34px; 
       font-weight: 800; 
-      color: #fcd34d; 
+      color: #6ee7b7; 
       margin: 22px 0; 
       padding: 18px; 
-      background: rgba(43, 31, 19, 0.9); 
+      background: rgba(16, 185, 129, 0.15); 
       border-radius: 20px; 
-      border: 2px dashed #f59e0b; 
-      text-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+      border: 2px dashed #10b981; 
+      text-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
       box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
     }
-    .gold-clue {
-      color: #6ee7b7;
-      border-color: #10b981;
-      text-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+
+    /* 최종 성경 구절 카드 */
+    .bible-card {
+      background: rgba(43, 31, 19, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      border-radius: 18px;
+      padding: 20px 16px;
+      margin: 18px 0;
+      box-shadow: inset 0 0 16px rgba(0,0,0,0.5);
+      text-align: left;
+    }
+    .bible-ref {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #f59e0b;
+      margin-bottom: 10px;
+      letter-spacing: 0.5px;
+    }
+    .bible-text {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #fff4e0;
+      word-break: keep-all;
     }
 
     .error-msg { 
@@ -224,7 +235,7 @@
     <!-- 인벤토리 및 진행도 -->
     <div id="gameHeader" style="display: none;">
       <div class="inventory">
-        <span>🗺️ 수집된 코너 단서</span>
+        <span id="groupIndicator">🚩 코순 탐험대</span>
         <div class="clue-slots" id="clueSlots">
           <span id="slot0">?</span><span id="slot1">?</span><span id="slot2">?</span><span id="slot3">?</span>
         </div>
@@ -234,16 +245,16 @@
 
     <!-- 1. 그룹 선택 뷰 -->
     <div id="view-group" class="view active">
-      <h2 class="title">야외 방탈출 탐험대<br>소속 그룹을 선택하세요</h2>
-      <p class="desc" style="background: none; border: none; padding: 0;">부여받은 그룹을 선택하면 시작 코너 지도로 안내됩니다. 서로 다른 코너에서 출발하여 병목 없이 순환합니다.</p>
+      <h2 class="title">야외 방탈출 미션<br>소속 코순을 선택하세요</h2>
+      <p class="desc" style="background: none; border: none; padding: 0;">배정받은 코순을 선택하면 지정된 시작 코너로 연결됩니다.</p>
       <div style="display: flex; flex-direction: column; gap: 14px; margin-top: auto;">
-        <button class="btn" onclick="startGame(1)">1그룹 (자현 코너 A 시작)</button>
-        <button class="btn" onclick="startGame(2)">2그룹 (혜영 코너 B 시작)</button>
-        <button class="btn" onclick="startGame(3)">3그룹 (재원 코너 C 시작)</button>
+        <button class="btn" onclick="startGame(1)">윤현 코순 (A코너 시작)</button>
+        <button class="btn" onclick="startGame(2)">보라 코순 (B코너 시작)</button>
+        <button class="btn" onclick="startGame(3)">소영 코순 (C코너 시작)</button>
       </div>
     </div>
 
-    <!-- 2. 문제 풀이 뷰 -->
+    <!-- 2. 일반 문제 풀이 뷰 -->
     <div id="view-quiz" class="view">
       <div id="cornerBadge" style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;">코너 A - 1번 미션</div>
       <h2 class="title" id="questionTitle">문제</h2>
@@ -252,192 +263,192 @@
       <div style="margin-top: auto;">
         <input type="text" id="quizInput" placeholder="정답을 입력하세요" autocomplete="off" autocapitalize="off">
         <div class="error-msg" id="quizError"></div>
-        <button class="btn" onclick="checkQuiz()">단서 해독하기</button>
+        <button class="btn" onclick="checkQuiz()">정답 제출</button>
       </div>
     </div>
 
-    <!-- 3. 개별 문제 단서 획득 뷰 -->
+    <!-- 3. 일반 문제 정답 확인 뷰 -->
     <div id="view-quiz-result" class="view" style="justify-content: center;">
       <div class="result-box">
-        <div class="result-icon">📜</div>
-        <h2 class="title">암호 해독 성공!</h2>
-        <p class="desc" style="background: none; border: none;">코너 암호를 완성하기 위한 조각 단서입니다.<br><span class="highlight">이 알파벳 단서를 잘 적어두거나 기억해두세요!</span></p>
-        <div class="big-clue" id="quizClue">a</div>
+        <div class="result-icon">🔓</div>
+        <h2 class="title">정답.</h2>
+        <p class="desc" style="background: none; border: none; font-size: 16px; color: #ffeed3;">진실에 가까워지고 있습니다.<br>다음 단서로 이동</p>
       </div>
-      <button class="btn" id="nextQuizBtn" onclick="nextQuizStep()">다음 문제로 이동</button>
+      <button class="btn" onclick="nextQuizStep()">다음 단서로 이동</button>
     </div>
 
-    <!-- 4. 코너 암호 입력 뷰 -->
+    <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 -->
     <div id="view-corner-master" class="view">
-      <h2 class="title" id="cornerMasterTitle">코너 A 단서 조합</h2>
-      <p class="desc">현재 코너에서 획득한 <span class="highlight">알파벳 조각 단서들</span>을 순서대로 조합하여 코너 최종 봉인을 해제하세요.</p>
+      <div style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;" id="cornerClueBadge">코너 단서 확인</div>
+      <h2 class="title" id="cornerMasterTitle">오프라인 단서를 입력하세요</h2>
+      <p class="desc">현재 코너의 모든 문제를 풀었습니다!<br>진행 요원 또는 현장에서 오프라인으로 획득한 <span class="highlight">글자 단서</span>를 입력해 주세요.<br><br><b>단서를 풀어야 다음 그룹으로 이동할 수 있습니다.</b></p>
       
       <div style="margin-top: auto;">
-        <input type="text" id="cornerInput" placeholder="예: abcd" autocomplete="off" autocapitalize="off">
+        <input type="text" id="cornerInput" placeholder="단서 글자를 입력하세요" autocomplete="off" autocapitalize="off">
         <div class="error-msg" id="cornerError"></div>
-        <button class="btn" onclick="checkCorner()">코너 봉인 해제</button>
+        <button class="btn" onclick="checkCorner()">단서 검증하기</button>
       </div>
     </div>
 
-    <!-- 5. 코너 클리어 (최종 단서 획득) 뷰 -->
+    <!-- 5. 코너 클리어 (다음 코너 이동 안내) 뷰 -->
     <div id="view-corner-result" class="view" style="justify-content: center;">
       <div class="result-box">
-        <div class="result-icon">🗝️</div>
-        <h2 class="title">코너 미션 완료!</h2>
-        <p class="desc" style="background: none; border: none;">최종 목적지로 가기 위한<br>핵심 나침반 단서를 획득했습니다.</p>
-        <div class="big-clue gold-clue" id="cornerFinalClue">가</div>
+        <div class="result-icon">📜</div>
+        <h2 class="title">단서 해독 완료!</h2>
+        <div class="big-clue" id="cornerFinalClue">시체</div>
+        <p class="desc" style="background: none; border: none; font-size: 16px; color: #6ee7b7; font-weight: 700;">
+          단서를 풀었으니 다음 그룹으로 이동할 수 있습니다!
+        </p>
       </div>
       <button class="btn" onclick="goToNextCorner()">다음 코너로 이동</button>
     </div>
 
     <!-- 6. 최종 장소 입력 뷰 -->
     <div id="view-final" class="view">
-      <h2 class="title">모든 코너를<br>정복했습니다!</h2>
-      <p class="desc">지금까지 획득한 4개의 핵심 나침반 단서를 조합하여 마지막 장소의 문을 여세요.</p>
+      <h2 class="title">모든 코너 정복 완료!</h2>
+      <p class="desc">지금까지 수집한 4개의 단서(시체, 수의, 증인, 변화)가 가리키는 궁극적인 <span class="highlight">최종 암호</span>를 입력하세요.</p>
       
       <div style="margin-top: auto;">
-        <input type="text" id="finalInput" placeholder="최종 암호 4글자" autocomplete="off" autocapitalize="off">
+        <input type="text" id="finalInput" placeholder="최종 암호를 입력하세요" autocomplete="off" autocapitalize="off">
         <div class="error-msg" id="finalError"></div>
         <button class="btn" onclick="checkFinal()">최종 목적지 봉인 해제</button>
       </div>
     </div>
 
-    <!-- 7. 최종 성공 (식당 안내) 뷰 -->
-    <div id="view-success" class="view" style="justify-content: center; text-align: center;">
-      <div class="result-icon">🏆</div>
-      <h2 class="title" style="color: #fcd34d;">탈출 성공!</h2>
-      <p class="desc" style="font-size: 16.5px; color: #ffeed3; line-height: 1.7; background: none; border: none;">
-        모든 단서를 완벽하게 풀어냈습니다!<br>
-        최종 집결지는 <b>[OOO 식당]</b> 입니다.<br><br>
-        <span style="color: #6ee7b7; font-weight: 700;">진행 요원에게 이 화면을 보여주고 식당으로 이동하세요!</span>
-      </p>
+    <!-- 7. 최종 성공 화면 (그리스도의 부활 + 성경 구절 + 식당 안내) -->
+    <div id="view-success" class="view" style="text-align: center;">
+      <div class="result-icon" style="margin-top: 10px;">✨</div>
+      <h1 style="font-size: 30px; font-weight: 900; color: #fcd34d; margin-bottom: 16px; text-shadow: 0 0 16px rgba(245, 158, 11, 0.6); word-break: keep-all;">
+        그리스도의 부활
+      </h1>
+
+      <div class="bible-card">
+        <div class="bible-ref">📖 요한복음 11장 25-26절</div>
+        <div class="bible-text">
+          "예수께서 이르시되 나는 부활이요 생명이니 나를 믿는 자는 죽어도 살겠고 무릇 살아서 나를 믿는 자는 영원히 죽지 아니하리니 이것을 네가 믿느냐"
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.35); border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.25);">
+        <p style="font-size: 17px; color: #ffeed3; line-height: 1.6;">
+          모든 방탈출 미션을 완수하셨습니다!<br>
+          최종 집결지는 <b>[OOO 식당]</b> 입니다.<br><br>
+          <span style="color: #6ee7b7; font-weight: 700;">가장 먼저 도착하는 팀에게 보너스가 주어집니다!</span>
+        </p>
+      </div>
     </div>
 
   </div>
 
   <script>
-    // --- 1. 실제 퀴즈 데이터 세팅 (CSV 연동) ---
+    // --- 1. 코너별 문제 세팅 ---
     const cornerData = {
-      // 코너 A: 자현 (4문제, 단서: a, b, c, d)
+      // 코너 A: 자현 (4문제)
       'A': {
         name: '코너 A (자현)',
         questions: [
           { 
             title: "문제 1. 우물가의 마주침",
             desc: "물을 길으러 온 한 여인과 물을 청한 한 사람이 우물가에서 마주하였다. 그가 말한 물은 다시 길으러 오지 않아도 되는 물이었다.\n\n이곳에서 그들이 마주한 때에 흐르는 물의 시작과 끝을 더하여라.",
-            answers: ["25"],
-            clue: "a" 
+            answers: ["25"]
           },
           { 
             title: "문제 2. 기묘한 등식",
             desc: "RIAHC = 4\nTAC = 4\nELBAT = 4\nHAON = ?",
-            answers: ["2"],
-            clue: "b" 
+            answers: ["2"]
           },
           { 
             title: "문제 3. 열둘을 품은 자",
             desc: "나는 열둘을 품고 있으나 숫자는 없다.\n나는 쉬지 않고 돌지만 어디에도 가지 않는다.\n나를 찾아 내 뒤를 보아라.\n\n\"벌레를 싫어하는 이는 첫째는 누르고, 다음은 당기며, 마지막에는 거리를 둔다. 거리의 첫 숫자를 나의 얼굴에서 찾아 마주 보는 수를 취하라.\"",
-            answers: ["8"],
-            clue: "c" 
+            answers: ["8"]
           },
           { 
             title: "문제 4. 머무는 지붕",
             desc: "길을 걷던 자가 잠시 머물되 그곳은 그의 집이 아니다.\n여덟이 하나의 지붕을 이루는 곳을 찾아 그곳까지의 세 수를 취하여라.\n\n[제시어: A GOOD WAY]",
-            answers: ["god", "GOD"],
-            clue: "d" 
+            answers: ["god", "GOD"]
           }
-        ],
-        cornerAnswer: "abcd",
-        rewardClue: "가"
+        ]
       },
 
-      // 코너 B: 혜영 (3문제, 단서: e, f, g)
+      // 코너 B: 혜영 (3문제)
       'B': {
         name: '코너 B (혜영)',
         questions: [
           { 
             title: "문제 1. 8개의 보석",
             desc: "당신은 어떤 충격에도 깨지지 않는 보석이 8개 늘어져 있는 장소로 향한다. 8개의 보석에서 아래 사람의 움직임과 초성의 조합 단서를 조합하여 문제를 푸시오. 그리고 그 장소에서 발견한 숫자 단서를 가지고 문제를 풀어라.\n\n1) 몸이 움직이는 방향 \"ㅇ\" = 12\n2) 몸이 움직이는 형태 \"ㅅ\" = 4\n3) 움직여야 되는 신체 \"ㅂ\" = 11\n4) 움직여야 되는 신체 \"ㅎ\" = ?",
-            answers: ["6"],
-            clue: "e" 
+            answers: ["6"]
           },
           { 
             title: "문제 2. [비밀의 나무]",
             desc: "사람들이 '그물' 앞뒤에서 그리고 '쉼의 자리'를 순환하고 있다.\n그리고 이 모든 걸 밖에서 비밀스럽게 목격하고 있는 땅의 주인(나무)이 있다.\n쉼의 자리 개수와 그물의 개수가 모든 걸 바라보고 있는 땅의 주인을 찾게 할 것이다.\n\n쉼의 자리 개수 X, 그물의 개수 Y\nX * Y - (X + Y) = ☆\n☆ 번호를 가진 비밀의 주인을 찾아라. 그리고 그 ☆ 위에 있는 숫자는?",
-            answers: ["2"],
-            clue: "f" 
+            answers: ["2"]
           },
           { 
             title: "문제 3. [킬링 메시지]",
             desc: "경찰에 살인예고 전화가 왔다. 살인 목표에 대한 힌트는 배드민턴장에 있다고 했다. 배드민턴장에 도착했더니 아래와 같은 수상한 노트가 발견되었다.\n\n8206-0089\n\n해당 번호로 전화하니 없는 번호라고 뜬다.\n그리고 그 밑에 또 하나의 힌트가 있다:\n\"배드민턴 코트 사각형(겹치지 않는 최소단위 사각형) 개수의 총합은 살인 목표의 전화번호 뒤 4자리의 각 숫자의 합과 일치한다.\"\n\n살인 목표물의 전화번호 (국번/지역번호 제외) 8자리의 각 숫자의 총합은?",
-            answers: ["33"],
-            clue: "g" 
+            answers: ["33"]
           }
-        ],
-        cornerAnswer: "efg",
-        rewardClue: "나"
+        ]
       },
 
-      // 코너 C: 재원 (4문제, 단서: h, i, j, k)
+      // 코너 C: 재원 (4문제)
       'C': {
         name: '코너 C (재원)',
         questions: [
           { 
             title: "1. 휴식공간",
             desc: "하나는 어둠 속에서 길을 지키고,\n하나는 이른 아침 사람들을 모은다.\n전자에 적힌 두 수 중 작은 것,\n후자에 적힌 두 시간 중 이른 것을 찾아라.\n둘의 합은?",
-            answers: ["8"],
-            clue: "h" 
+            answers: ["8"]
           },
           { 
             title: "2. 무너지는 발판",
             desc: "건너갈 수 있는 길은 단 하나.\n일곱 개의 발판은 한 번 밟으면 무너진다. 모든 발판을 지나 반대편까지 건너가라.\n- 1번에서 출발해 7번에서 끝난다.\n- 모든 발판을 정확히 한 번씩 밟아야 한다.\n- 한 번에 번호 차이가 2 또는 3인 발판으로만 이동할 수 있다.\n\n밟은 발판 번호를 순서대로 이어 적으시오. (예: 13...)",
-            answers: ["1364257", "1->3->6->4->2->5->7", "1-3-6-4-2-5-7"],
-            clue: "i" 
+            answers: ["1364257", "1->3->6->4->2->5->7", "1-3-6-4-2-5-7"]
           },
           { 
             title: "3. 무대 위 네 배우",
             desc: "어젯밤, 당신은 이 공연을 지켜본 관객이었다. 공연이 끝날 때까지 한 자리에서 무대를 바라보았다. 네 배우가 당시의 모습을 이렇게 기억했다.\nA : \"무대의 가운데 두 배우는 B와 C였어요.\"\nB : \"당신이 봤을 때 거짓말쟁이는 제 오른쪽에 있었어요.\"\nC : \"당신에게 가장 가까웠던 배우는 저였어요.\"\nD : \"A와 저 사이에는 두 명이 있었어요.\"\n\n거짓말쟁이 배우는 누구인가? (알파벳)",
-            answers: ["C", "c"],
-            clue: "j" 
+            answers: ["C", "c"]
           },
           { 
             title: "4. 네 자리 암호",
             desc: "규칙을 찾아 네 자리 암호를 완성하라.\n\n9634 = ○XX○\n4528 = ○X○X\n0197 = ●X○X\n1093 = X○○X\n\n(●: 숫자와 위치 일치 / ○: 숫자는 있으나 다른 위치 / X: 포함되지 않음)",
-            answers: ["0942"],
-            clue: "k" 
+            answers: ["0942"]
           }
-        ],
-        cornerAnswer: "hijk",
-        rewardClue: "다"
+        ]
       },
 
-      // 코너 D: 노아 (3문제, 단서: l, m, n)
+      // 코너 D: 노아 (3문제)
       'D': {
         name: '코너 D (노아)',
         questions: [
           { 
             title: "1. 머릿돌의 비밀",
             desc: "마가복음 12장\nA: 물건을 버린 집 짓는 사람들의 총원은? (사람 1명당 1개씩만 버렸다)\nB: 그리고 그 버린 물건은 예수님이 태어나신 이후 몇 년 만에 귀한 대접을 받았나?\n\nB / A = ?",
-            answers: ["505"],
-            clue: "l" 
+            answers: ["505"]
           },
           { 
             title: "2. 내려다보는 매화",
             desc: "우리를 내려다보고 있는 매화의 꽃잎은 총 몇 개인가?",
-            answers: ["36"],
-            clue: "m" 
+            answers: ["36"]
           },
           { 
             title: "3. 길목의 표식",
             desc: "정자 앞을 오르내리는 계단의 총 개수(A)와 정자 인근 파란 가로등 관리번호(청담근린공원 3-9)에 적힌 두 숫자의 곱(B)을 구하시오.\n\n계단 수(A) + 번호의 곱(B) = ?\n(※ 현장 계단 수 13개 기준: 13 + (3 * 9) = ?)",
-            answers: ["40"],
-            clue: "n" 
+            answers: ["40"]
           }
-        ],
-        cornerAnswer: "lmn",
-        rewardClue: "라"
+        ]
       }
     };
+
+    // 방문 순서별 단서 정답
+    const stageClues = [
+      { step: 1, clue: "시체" },
+      { step: 2, clue: "수의" },
+      { step: 3, clue: "증인" },
+      { step: 4, clue: "변화" }
+    ];
 
     // --- 2. 상태 관리 변수 ---
     let myRoute = []; 
@@ -469,13 +480,17 @@
 
     // --- 4. 게임 로직 ---
     function startGame(group) {
-      // 1그룹: A -> B -> C -> D
-      // 2그룹: B -> C -> D -> A
-      // 3그룹: C -> D -> A -> B
+      const groupNames = {
+        1: "윤현 코순",
+        2: "보라 코순",
+        3: "소영 코순"
+      };
+
       if (group === 1) myRoute = ['A', 'B', 'C', 'D'];
       if (group === 2) myRoute = ['B', 'C', 'D', 'A'];
       if (group === 3) myRoute = ['C', 'D', 'A', 'B'];
 
+      document.getElementById('groupIndicator').textContent = `🚩 ${groupNames[group]}`;
       document.getElementById('gameHeader').style.display = 'block';
       loadQuiz();
     }
@@ -485,7 +500,6 @@
       const corner = cornerData[cornerId];
       const quiz = corner.questions[currentQuizIdx];
 
-      // 총 14문제 기준 진행률
       let totalSolved = 0;
       for (let i = 0; i < currentCornerIdx; i++) totalSolved += cornerData[myRoute[i]].questions.length;
       totalSolved += currentQuizIdx;
@@ -503,7 +517,6 @@
       const cornerId = myRoute[currentCornerIdx];
       const quiz = cornerData[cornerId].questions[currentQuizIdx];
       
-      // 입력값 정규화 (공백 제거, 특수문자 화살표 정돈, 소문자화)
       const input = document.getElementById('quizInput').value
         .trim()
         .toLowerCase()
@@ -517,10 +530,9 @@
       );
 
       if (validAnswers.includes(input)) {
-        document.getElementById('quizClue').textContent = quiz.clue;
         switchView('view-quiz-result');
       } else {
-        showError('quizInput', 'quizError', '암호가 일치하지 않습니다. 현장의 단서를 다시 확인하세요.');
+        showError('quizInput', 'quizError', '정답이 일치하지 않습니다. 다시 확인해 보세요.');
       }
     }
 
@@ -532,27 +544,26 @@
       if (currentQuizIdx < corner.questions.length) {
         loadQuiz();
       } else {
-        document.getElementById('cornerMasterTitle').textContent = `${corner.name} 봉인 해제`;
+        const stageNum = currentCornerIdx + 1;
+        document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${stageNum}번째 단서)`;
+        document.getElementById('cornerMasterTitle').textContent = `${stageNum}번째 단서를 입력하세요`;
         clearInput('cornerInput', 'cornerError');
         switchView('view-corner-master');
       }
     }
 
     function checkCorner() {
-      const cornerId = myRoute[currentCornerIdx];
-      const corner = cornerData[cornerId];
-      const input = document.getElementById('cornerInput').value.trim().toLowerCase().replace(/\s+/g, '');
+      const input = document.getElementById('cornerInput').value.trim().replace(/\s+/g, '');
+      const expectedClue = stageClues[currentCornerIdx].clue;
 
-      if (input === corner.cornerAnswer) {
-        document.getElementById('cornerFinalClue').textContent = corner.rewardClue;
-        collectedFinalClues.push(corner.rewardClue);
+      if (input === expectedClue) {
+        document.getElementById('cornerFinalClue').textContent = expectedClue;
+        collectedFinalClues.push(expectedClue);
         
-        // 인벤토리 슬롯 채우기
-        document.getElementById(`slot${currentCornerIdx}`).textContent = corner.rewardClue;
-        
+        document.getElementById(`slot${currentCornerIdx}`).textContent = expectedClue;
         switchView('view-corner-result');
       } else {
-        showError('cornerInput', 'cornerError', '모은 조각 단서의 조합이 올바르지 않습니다.');
+        showError('cornerInput', 'cornerError', '오프라인 단서가 올바르지 않습니다. 다시 확인하세요.');
       }
     }
 
@@ -569,14 +580,15 @@
       }
     }
 
+    // 최종 암호 "그리스도의 부활" 체크
     function checkFinal() {
       const input = document.getElementById('finalInput').value.trim().replace(/\s+/g, '');
-      const hasAll = ['가','나','다','라'].every(char => input.includes(char));
+      const targetAnswer = "그리스도의부활";
 
-      if (hasAll && input.length === 4) {
+      if (input === targetAnswer) {
         switchView('view-success');
       } else {
-        showError('finalInput', 'finalError', '4개의 핵심 나침반 단서가 정확히 조합되지 않았습니다.');
+        showError('finalInput', 'finalError', '암호가 일치하지 않습니다. 4개의 단서가 가리키는 진실을 떠올려보세요.');
       }
     }
   </script>
