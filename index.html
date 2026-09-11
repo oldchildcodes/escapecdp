@@ -43,7 +43,7 @@
       display: flex; 
       flex-direction: column; 
       min-height: 620px;
-      transition: background 0.4s ease, border-color 0.4s ease;
+      transition: background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
     }
 
     /* 코너 최종 단서 해독 전용 배경색 (다크 버건디/미스터리 톤) */
@@ -51,6 +51,40 @@
       background: rgba(42, 16, 22, 0.95);
       border: 1px solid rgba(244, 63, 94, 0.45);
       box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), inset 0 0 50px rgba(225, 29, 72, 0.25);
+    }
+
+    /* [신규] 최종 암호 입력 & 최종 성공 화면 전용 특별 배경 (딥 나이트 & 골든 엠버 톤) */
+    .app-container.final-mode {
+      background: radial-gradient(circle at top, rgba(30, 27, 75, 0.95) 0%, rgba(10, 10, 26, 0.98) 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.65);
+      box-shadow: 0 28px 60px rgba(0, 0, 0, 0.95), inset 0 0 50px rgba(234, 179, 8, 0.22);
+    }
+
+    .app-container.final-mode .desc {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid rgba(250, 204, 21, 0.3);
+      color: #fef08a;
+    }
+
+    .app-container.final-mode input[type="text"] {
+      border: 2px solid #ca8a04;
+      background: rgba(23, 23, 42, 0.85);
+      color: #fef08a;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .app-container.final-mode input[type="text"]:focus {
+      border-color: #facc15;
+      box-shadow: 0 0 16px rgba(250, 204, 21, 0.5);
+    }
+
+    .app-container.final-mode .btn {
+      background: linear-gradient(135deg, #eab308, #ca8a04);
+      color: #1e1b4b;
+      border: 1px solid #fef08a;
+      box-shadow: 0 6px 20px rgba(234, 179, 8, 0.35);
+    }
+    .app-container.final-mode .btn:active {
+      background: linear-gradient(135deg, #ca8a04, #a16207);
     }
 
     .view { 
@@ -268,25 +302,25 @@
     }
 
     .bible-card {
-      background: rgba(43, 31, 19, 0.85);
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(250, 204, 21, 0.45);
       border-radius: 18px;
       padding: 20px 16px;
       margin: 18px 0;
-      box-shadow: inset 0 0 16px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.7), 0 0 15px rgba(234, 179, 8, 0.15);
       text-align: left;
     }
     .bible-ref {
       font-size: 13.5px;
       font-weight: 800;
-      color: #f59e0b;
+      color: #facc15;
       margin-bottom: 10px;
       letter-spacing: 0.5px;
     }
     .bible-text {
       font-size: 15px;
       line-height: 1.75;
-      color: #fff4e0;
+      color: #fffbeb;
       word-break: keep-all;
     }
 
@@ -351,7 +385,7 @@
       </div>
     </div>
 
-    <!-- [신규] 코너 진입 전: 코너지기(NPC) 코드 입력 뷰 -->
+    <!-- 코너 진입 전: 코너지기(NPC) 코드 입력 뷰 -->
     <div id="view-corner-gate" class="view">
       <div style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;" id="gateCornerBadge">코너 A 도착</div>
       <h2 class="title" id="gateTitle">코너지기 인증</h2>
@@ -360,7 +394,6 @@
       </p>
 
       <div style="margin-top: auto;">
-        <!-- 4개 빈칸 입력 박스 -->
         <div class="code-input-container">
           <input type="text" maxlength="1" class="code-box" id="codeDigit1" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeydown(event, 1)">
           <input type="text" maxlength="1" class="code-box" id="codeDigit2" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeydown(event, 2)">
@@ -385,7 +418,7 @@
       </div>
     </div>
 
-    <!-- 3. 일반 문제 정답 확인 뷰 (단서/조각 안내) -->
+    <!-- 3. 일반 문제 정답 확인 뷰 -->
     <div id="view-quiz-result" class="view" style="justify-content: center;">
       <div class="result-box">
         <div class="result-icon">🔓</div>
@@ -398,7 +431,7 @@
       <button class="btn" onclick="nextQuizStep()">다음 단서로 이동</button>
     </div>
 
-    <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 (배경색 변경 화면) -->
+    <!-- 4. 코너 최종: 오프라인 단서 입력 뷰 (다크 버건디 톤 배경) -->
     <div id="view-corner-master" class="view">
       <div style="font-size: 13.5px; color: #f43f5e; font-weight: 800; margin-bottom: 8px;" id="cornerClueBadge">코너 단서 확인</div>
       <h2 class="title" id="cornerMasterTitle">단서 조각 취합</h2>
@@ -426,10 +459,11 @@
       <button class="btn" onclick="goToNextCorner()">다음 코너로 이동</button>
     </div>
 
-    <!-- 6. 최종 장소 입력 뷰 -->
+    <!-- 6. 최종 장소 입력 뷰 (특별 배경: 딥 나이트 & 로얄 골드) -->
     <div id="view-final" class="view">
-      <h2 class="title">모든 단서/증거 수집 완료!</h2>
-      <p class="desc">지금까지 수집한 4개의 단서/증거(시체, 수의, 증인, 변화)가 가리키는 궁극적인 <span class="highlight">진실</span>은 무엇일까요?</p>
+      <div style="font-size: 13.5px; color: #facc15; font-weight: 800; margin-bottom: 8px; text-shadow: 0 0 10px rgba(250,204,21,0.5);">FINAL MISSION</div>
+      <h2 class="title" style="color: #fffbeb;">모든 단서/증거 수집 완료!</h2>
+      <p class="desc">지금까지 수집한 4개의 단서/증거(시체, 수의, 증인, 변화)가 가리키는 궁극적인 <span class="highlight" style="color: #fde047; text-shadow: 0 0 8px rgba(250,204,21,0.6);">진실</span>은 무엇일까요?</p>
       
       <div style="margin-top: auto;">
         <input type="text" id="finalInput" placeholder="최종 암호를 입력하세요" autocomplete="off" autocapitalize="off">
@@ -438,10 +472,10 @@
       </div>
     </div>
 
-    <!-- 7. 최종 성공 화면 -->
+    <!-- 7. 최종 성공 화면 (특별 배경 유지) -->
     <div id="view-success" class="view" style="text-align: center;">
       <div class="result-icon" style="margin-top: 10px;">✨</div>
-      <h1 style="font-size: 30px; font-weight: 900; color: #fcd34d; margin-bottom: 16px; text-shadow: 0 0 16px rgba(245, 158, 11, 0.6); word-break: keep-all;">
+      <h1 style="font-size: 32px; font-weight: 900; color: #fde047; margin-bottom: 16px; text-shadow: 0 0 20px rgba(250, 204, 21, 0.7); word-break: keep-all;">
         그리스도의 부활
       </h1>
 
@@ -452,13 +486,13 @@
         </div>
       </div>
 
-      <div style="margin-top: 16px; padding: 16px; background: rgba(0,0,0,0.35); border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.25);">
-        <p style="font-size: 17px; color: #ffeed3; line-height: 1.6;">
+      <div style="margin-top: 16px; padding: 18px; background: rgba(15, 23, 42, 0.8); border-radius: 18px; border: 1px solid rgba(250, 204, 21, 0.35);">
+        <p style="font-size: 16.5px; color: #fef08a; line-height: 1.7; word-break: keep-all;">
           4가지 증거를 모두 찾아 사건의 진실을 밝혀낸 것을 축하합니다!<br>
-          그러나 오늘의 여정은 아직 끝나지 않았습니다.<br>
+          그러나 오늘의 여정은 아직 끝나지 않았습니다.<br><br>
           부활하신 주님께서 우리에게 주시는 오늘의 마지막 선물인<br>
           일용할 양식! <b>[OOO 식당]</b> 입니다.<br><br>
-          <span style="color: #6ee7b7; font-weight: 700;">모두 집결지로 모여주셔서 하나의 진실을 당당히 선포해야합니다.</span>
+          <span style="color: #6ee7b7; font-weight: 800; font-size: 17px; text-shadow: 0 0 10px rgba(110, 231, 183, 0.5);">모두 집결지로 모여주셔서 하나의 진실을 당당히 선포해야합니다.</span>
         </p>
       </div>
     </div>
@@ -584,7 +618,7 @@
 
     // --- 2. 상태 관리 변수 ---
     let myRoute = []; 
-    let currentCornerIdx = 0; // 0, 1, 2, 3번째 방문 코너
+    let currentCornerIdx = 0;
     let currentQuizIdx = 0;
     let collectedFinalClues = [];
 
@@ -594,12 +628,25 @@
       document.getElementById(viewId).classList.add('active');
     }
 
+    // 코너 단서 취합용 다크 버건디 모드
     function setSpecialMode(isSpecial) {
       const container = document.getElementById('appContainer');
       if (isSpecial) {
         container.classList.add('special-mode');
+        container.classList.remove('final-mode');
       } else {
         container.classList.remove('special-mode');
+      }
+    }
+
+    // 최종 미션 및 엔딩 전용 딥 네이비 & 로얄 골드 모드
+    function setFinalMode(isFinal) {
+      const container = document.getElementById('appContainer');
+      if (isFinal) {
+        container.classList.add('final-mode');
+        container.classList.remove('special-mode');
+      } else {
+        container.classList.remove('final-mode');
       }
     }
 
@@ -665,9 +712,6 @@
         3: "소영 코순"
       };
 
-      // 윤현: A -> B -> C -> D
-      // 보라: D -> A -> B -> C
-      // 소영: C -> D -> A -> B
       if (group === 1) myRoute = ['A', 'B', 'C', 'D'];
       if (group === 2) myRoute = ['D', 'A', 'B', 'C'];
       if (group === 3) myRoute = ['C', 'D', 'A', 'B'];
@@ -675,15 +719,14 @@
       document.getElementById('groupIndicator').textContent = `🚩 ${groupNames[group]}`;
       document.getElementById('gameHeader').style.display = 'block';
       
-      // 첫 번째 코너의 NPC 코드 확인 화면으로 진입
       currentCornerIdx = 0;
       currentQuizIdx = 0;
       showCornerGate();
     }
 
-    // 코너 시작 전 NPC 코드 입력 게이트 화면 로드
     function showCornerGate() {
       setSpecialMode(false);
+      setFinalMode(false);
       const cornerId = myRoute[currentCornerIdx];
       const corner = cornerData[cornerId];
 
@@ -698,7 +741,6 @@
       }, 300);
     }
 
-    // NPC 4자리 코드 확인
     function checkGateCode() {
       const cornerId = myRoute[currentCornerIdx];
       const corner = cornerData[cornerId];
@@ -715,11 +757,9 @@
       }
 
       if (enteredCode === corner.npcCode) {
-        // 일치하면 문제 풀이 화면으로 진입!
         currentQuizIdx = 0;
         loadQuiz();
       } else {
-        // 오답 처리
         for (let i = 1; i <= 4; i++) {
           const el = document.getElementById(`codeDigit${i}`);
           el.classList.remove('error');
@@ -736,7 +776,6 @@
       const corner = cornerData[cornerId];
       const quiz = corner.questions[currentQuizIdx];
 
-      // 총 14문제 진행률
       let totalSolved = 0;
       for (let i = 0; i < currentCornerIdx; i++) totalSolved += cornerData[myRoute[i]].questions.length;
       totalSolved += currentQuizIdx;
@@ -748,6 +787,7 @@
       
       clearInput('quizInput', 'quizError');
       setSpecialMode(false);
+      setFinalMode(false);
       switchView('view-quiz');
     }
 
@@ -799,8 +839,9 @@
       if (currentQuizIdx < corner.questions.length) {
         loadQuiz();
       } else {
-        // 코너 마지막 문제를 푼 다음 화면
+        // 코너 마지막 문제를 푼 다음 오프라인 단서 화면 진입 (다크 버건디 모드 활성화)
         setSpecialMode(true);
+        setFinalMode(false);
         const curClueName = clueNames[currentCornerIdx];
         document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${curClueName})`;
         document.getElementById('cornerMasterTitle').textContent = `${curClueName}를 풀어주세요`;
@@ -835,11 +876,11 @@
       currentQuizIdx = 0;
 
       if (currentCornerIdx < 4) {
-        // 다음 코너도 바로 문제를 보여주지 않고 NPC 코드 입력 게이트 화면으로 안내
         showCornerGate();
       } else {
-        // 4개 코너를 모두 돌았을 때 최종 장소 암호 화면
+        // 4개 코너 모두 완료 -> 최종 암호 화면 진입 시 특별 배경(딥 나이트 & 골든 엠버) 적용!
         document.getElementById('progressFill').style.width = '100%';
+        setFinalMode(true);
         clearInput('finalInput', 'finalError');
         switchView('view-final');
       }
@@ -850,6 +891,8 @@
       const targetAnswer = "그리스도의부활";
 
       if (input === targetAnswer) {
+        // 최종 성공 화면에서도 특별 배경 유지
+        setFinalMode(true);
         switchView('view-success');
       } else {
         showError('finalInput', 'finalError', '암호가 일치하지 않습니다. 4개의 단서가 가리키는 진실을 떠올려보세요.');
