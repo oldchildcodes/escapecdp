@@ -213,7 +213,7 @@
       color: #fcd34d;
       outline: none;
       transition: all 0.2s;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4); 
     }
     .code-box:focus {
       border-color: #d4af37;
@@ -413,7 +413,6 @@
       text-shadow: 0 1px 4px rgba(0,0,0,0.8); 
     }
 
-    /* [신규] 데시벨 측정 & 최종 식당 전용 스타일 */
     .proclamation-box {
       background: rgba(15, 23, 42, 0.85);
       border-radius: 18px;
@@ -757,7 +756,7 @@
         ]
       },
 
-      // 코너 B: 혜영 (3문제, 코드: 0321)
+      // 코너 B: 혜영 (4문제, 코드: 0321)
       'B': {
         name: '코너 B (혜영)',
         npcCode: '0321',
@@ -776,6 +775,11 @@
             title: "문제 3. 갇힌 자들의 시편",
             desc: "하나의 배드민턴 코트 안에서 겹치지 않는 최소 단위 사각형의 수를 모두 세어라. 그 답을 X라 한다.\n\n배드민턴장 한쪽의 현수막을 찾아,\nX의 두 숫자 사이에 갇힌 수들 가운데 ‘갇힌 자들을 이끌어 내사 형통하게 하시는’\n시편 말씀의 세 숫자를 찾아라.\n\n비밀번호: □□□\n\n(*어플 성경 이용 가능)",
             answers: ["686"]
+          },
+          { 
+            title: "문제 4. 기묘한 크기 비교",
+            desc: "5는 0보다 크고, 0은 2보다 크다.\n그렇다면 2보다 큰 것은?",
+            answers: ["5", "오"]
           }
         ]
       },
@@ -808,14 +812,14 @@
         ]
       },
 
-      // 코너 D: 노아 (3문제, 코드: 0422)
+      // 코너 D: 노아 (4문제로 확장, 코드: 0422)
       'D': {
         name: '코너 D (노아)',
         npcCode: '0422',
         questions: [
           { 
             title: "1. 머릿돌의 비밀",
-            desc: "마가복음 12장\nA: 물건을 버린 집 짓는 사람들의 총원은? (사람 1명당 1개씩만 버렸다)\nB: 그리고 그 버린 물건은 예수님이 태어나신 이후 몇 년 만에 귀한 대접을 받았나?\n\nB / A = ?",
+            desc: "마가복음 12장\nA: 건축자들은 어떤 물건을 버렸다. 주위를 둘러보고 몇개의 물건을 버렸는지 맞추어라.\nB: 그리고 그 버린 물건은 예수님이 태어나신 이후 몇 년 만에 쓰임받았는가?\n\nB / A = ?",
             answers: ["505"]
           },
           { 
@@ -824,9 +828,14 @@
             answers: ["36"]
           },
           { 
-            title: "3. 길목의 표식",
-            desc: "정자 앞을 오르내리는 계단의 총 개수(A)와 정자 인근 파란 가로등 관리번호(청담근린공원 3-9)에 적힌 두 숫자의 곱(B)을 구하시오.\n\n계단 수(A) + 번호의 곱(B) = ?\n(※ 현장 계단 수 13개 기준: 13 + (3 * 9) = ?)",
-            answers: ["40"]
+            title: "3. 다잉메세지",
+            desc: "조용한 필라테스 스튜디오의 개인 레슨실.\n센터의 인기 강사가 바닥에 쓰러진 채 발견되었습니다.\n피해자는 숨이 끊어지기 직전, 고장나 있는 디지털시계가 걸려있는 반대편\n거울 벽면 바로 아래 마루 바닥에 땀과 피로 각진 네 자리 숫자를 간신히 남겨 두었습니다.\n바닥에 남겨진 다잉메시지:\n\n7 7 1 8\n\n레슨실 한쪽 벽면 전체는 전신 거울로 덮여 있습니다.\n강사가 마지막 힘을 다해 가리킨 살인자의 이름은 누구일까요?",
+            answers: ["BILL", "bill", "Bill", "빌"]
+          },
+          {
+            title: "4. 하루 두 번 사라지는 문자",
+            desc: "빨간색 성벽으로 둘러싸인 세계에\n하루 두 번 모습을 감추는 문자는?",
+            answers: ["SINIX", "sinix", "Sinix", "시닉스"]
           }
         ]
       }
@@ -856,6 +865,11 @@
     let micStream = null;
     let animationFrameId = null;
     let isMissionAccomplished = false;
+
+    // 전체 문제 수 계산 헬퍼 (각 4문제씩 총 16문제)
+    function getTotalQuestionCount() {
+      return Object.values(cornerData).reduce((sum, c) => sum + c.questions.length, 0);
+    }
 
     // --- 3. UI 헬퍼 함수 ---
     function switchView(viewId) {
@@ -1026,7 +1040,9 @@
       let totalSolved = 0;
       for (let i = 0; i < currentCornerIdx; i++) totalSolved += cornerData[myRoute[i]].questions.length;
       totalSolved += currentQuizIdx;
-      document.getElementById('progressFill').style.width = `${(totalSolved / 14) * 100}%`;
+      
+      const totalQCount = getTotalQuestionCount();
+      document.getElementById('progressFill').style.width = `${(totalSolved / totalQCount) * 100}%`;
 
       document.getElementById('cornerBadge').textContent = `${corner.name} - ${currentQuizIdx + 1}번 미션`;
       document.getElementById('questionTitle').textContent = quiz.title;
@@ -1170,9 +1186,7 @@
       }
     }
 
-    // ==========================================
-    // [신규 기능] 마이크 데시벨(dB) 측정 로직
-    // ==========================================
+    // 마이크 데시벨(dB) 측정 로직
     async function startAudioMeasurement() {
       if (isMissionAccomplished) return;
 
@@ -1203,14 +1217,12 @@
 
           analyser.getByteFrequencyData(dataArray);
 
-          // 볼륨 RMS 계산
           let sum = 0;
           for (let i = 0; i < dataArray.length; i++) {
             sum += dataArray[i] * dataArray[i];
           }
           const rms = Math.sqrt(sum / dataArray.length);
 
-          // 데시벨 근사치 매핑 (0 ~ 100 dB 스케일)
           let approxDb = 0;
           if (rms > 0) {
             approxDb = Math.round(20 * Math.log10(rms) + 40);
@@ -1218,12 +1230,10 @@
           if (approxDb < 20) approxDb = 20;
           if (approxDb > 110) approxDb = 110;
 
-          // UI 게이지 반영
           document.getElementById('dbDisplay').innerHTML = `${approxDb} <span style="font-size: 20px; color: #d1c0ab;">dB</span>`;
           const percentage = Math.min(100, Math.max(0, (approxDb / 100) * 100));
           document.getElementById('dbBar').style.width = `${percentage}%`;
 
-          // 90dB 이상 돌파 시 성공 판정!
           if (approxDb >= 90) {
             unlockRestaurant();
             return;
@@ -1240,7 +1250,6 @@
       }
     }
 
-    // 90dB 돌파 또는 수동 완료 시 식당 정보 공개
     function unlockRestaurant() {
       if (isMissionAccomplished) return;
       isMissionAccomplished = true;
@@ -1255,11 +1264,9 @@
 
       if (navigator.vibrate) navigator.vibrate([200, 100, 300]);
 
-      // 측정 섹션 비활성화 및 축하 상태로 변경
       const meterBox = document.getElementById('proclamationSection');
       meterBox.style.display = 'none';
 
-      // 식당 정보 카드 노출
       const restaurantCard = document.getElementById('restaurantCard');
       restaurantCard.style.display = 'block';
       restaurantCard.scrollIntoView({ behavior: 'smooth' });
