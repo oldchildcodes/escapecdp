@@ -183,7 +183,6 @@
       box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
     }
 
-    /* 최종 성경 구절 카드 */
     .bible-card {
       background: rgba(43, 31, 19, 0.85);
       border: 1px solid rgba(245, 158, 11, 0.4);
@@ -315,7 +314,7 @@
       </div>
     </div>
 
-    <!-- 7. 최종 성공 화면 (그리스도의 부활 + 성경 구절 + 식당 안내) -->
+    <!-- 7. 최종 성공 화면 -->
     <div id="view-success" class="view" style="text-align: center;">
       <div class="result-icon" style="margin-top: 10px;">✨</div>
       <h1 style="font-size: 30px; font-weight: 900; color: #fcd34d; margin-bottom: 16px; text-shadow: 0 0 16px rgba(245, 158, 11, 0.6); word-break: keep-all;">
@@ -364,7 +363,7 @@
           },
           { 
             title: "문제 4. 머무는 지붕",
-            desc: "길을 걷던 자가 잠시 머물되 그곳은 그의 집이 아니다.\n여덟이 하나의 지붕을 이루는 곳을 찾아 그곳까지의 세 수를 취하여라.\n\n[제시어: A GOOD WAY]",
+            desc: "길을 걷던 자가 잠시 머물되,\n그곳은 그의 집이 아니다.\n\n여덟이 하나의 지붕을 이루는 곳을 찾아\n그곳까지의 세 수를 취하여라.\n\n그 길은 A GOOD WAY일 것이다.",
             answers: ["god", "GOD"]
           }
         ]
@@ -385,9 +384,9 @@
             answers: ["2"]
           },
           { 
-            title: "문제 3. [킬링 메시지]",
-            desc: "경찰에 살인예고 전화가 왔다. 살인 목표에 대한 힌트는 배드민턴장에 있다고 했다. 배드민턴장에 도착했더니 아래와 같은 수상한 노트가 발견되었다.\n\n8206-0089\n\n해당 번호로 전화하니 없는 번호라고 뜬다.\n그리고 그 밑에 또 하나의 힌트가 있다:\n\"배드민턴 코트 사각형(겹치지 않는 최소단위 사각형) 개수의 총합은 살인 목표의 전화번호 뒤 4자리의 각 숫자의 합과 일치한다.\"\n\n살인 목표물의 전화번호 (국번/지역번호 제외) 8자리의 각 숫자의 총합은?",
-            answers: ["33"]
+            title: "문제 3. 갇힌 자들의 시편",
+            desc: "하나의 배드민턴 코트 안에서 겹치지 않는 최소 단위 사각형의 수를 모두 세어라. 그 답을 X라 한다.\n\n배드민턴장 한쪽의 현수막을 찾아,\nX의 두 숫자 사이에 갇힌 수들 가운데 ‘갇힌 자들을 이끌어 내사 형통하게 하시는’\n시편 말씀의 세 숫자를 찾아라.\n\n비밀번호: □□□\n\n(*어플 성경 이용 가능)",
+            answers: ["686"]
           }
         ]
       },
@@ -580,7 +579,6 @@
       }
     }
 
-    // 최종 암호 "그리스도의 부활" 체크
     function checkFinal() {
       const input = document.getElementById('finalInput').value.trim().replace(/\s+/g, '');
       const targetAnswer = "그리스도의부활";
