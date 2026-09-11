@@ -159,6 +159,38 @@
       box-shadow: 0 0 14px rgba(239, 68, 68, 0.4);
     }
 
+    /* 4자리 빈칸 입력 박스 스타일 */
+    .code-input-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 24px 0 16px 0;
+    }
+    .code-box {
+      width: 58px;
+      height: 64px;
+      padding: 0;
+      font-size: 26px;
+      font-weight: 800;
+      text-align: center;
+      border-radius: 14px;
+      border: 2px solid #5a4632;
+      background: rgba(43, 33, 23, 0.9);
+      color: #fcd34d;
+      outline: none;
+      transition: all 0.2s;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .code-box:focus {
+      border-color: #d4af37;
+      background: rgba(56, 42, 29, 0.98);
+      box-shadow: 0 0 14px rgba(212, 175, 55, 0.5);
+    }
+    .code-box.error {
+      border-color: #ef4444;
+      animation: shake 0.4s;
+    }
+
     .btn {
       width: 100%; 
       padding: 18px; 
@@ -319,6 +351,27 @@
       </div>
     </div>
 
+    <!-- [신규] 코너 진입 전: 코너지기(NPC) 코드 입력 뷰 -->
+    <div id="view-corner-gate" class="view">
+      <div style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;" id="gateCornerBadge">코너 A 도착</div>
+      <h2 class="title" id="gateTitle">코너지기 인증</h2>
+      <p class="desc" id="gateDesc">
+        코너지기가 제공하는 코드를 입력해야지 문제를 시작할 수 있습니다.
+      </p>
+
+      <div style="margin-top: auto;">
+        <!-- 4개 빈칸 입력 박스 -->
+        <div class="code-input-container">
+          <input type="text" maxlength="1" class="code-box" id="codeDigit1" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeydown(event, 1)">
+          <input type="text" maxlength="1" class="code-box" id="codeDigit2" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeydown(event, 2)">
+          <input type="text" maxlength="1" class="code-box" id="codeDigit3" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 3)" onkeydown="handleCodeKeydown(event, 3)">
+          <input type="text" maxlength="1" class="code-box" id="codeDigit4" inputmode="numeric" autocomplete="off" oninput="handleCodeInput(this, 4)" onkeydown="handleCodeKeydown(event, 4)">
+        </div>
+        <div class="error-msg" id="gateError"></div>
+        <button class="btn" onclick="checkGateCode()">코드 확인 및 미션 시작</button>
+      </div>
+    </div>
+
     <!-- 2. 일반 문제 풀이 뷰 -->
     <div id="view-quiz" class="view">
       <div id="cornerBadge" style="font-size: 13.5px; color: #f59e0b; font-weight: 800; margin-bottom: 8px;">코너 A - 1번 미션</div>
@@ -367,7 +420,7 @@
         <h2 class="title">단서 해독 완료!</h2>
         <div class="big-clue" id="cornerFinalClue">시체</div>
         <p class="desc" style="background: none; border: none; font-size: 16px; color: #6ee7b7; font-weight: 700;">
-          단서를 풀었으니 다음 코너으로 이동할 수 있습니다!
+          단서를 풀었으니 다음 코너로 이동할 수 있습니다!
         </p>
       </div>
       <button class="btn" onclick="goToNextCorner()">다음 코너로 이동</button>
@@ -413,11 +466,12 @@
   </div>
 
   <script>
-    // --- 1. 코너별 문제 데이터 ---
+    // --- 1. 코너별 문제 데이터 & NPC 시작 코드 ---
     const cornerData = {
-      // 코너 A: 자현 (4문제)
+      // 코너 A: 자현 (4문제, 코드: 1129)
       'A': {
         name: '코너 A (자현)',
+        npcCode: '1129',
         questions: [
           { 
             title: "문제 1. 우물가의 마주침",
@@ -442,9 +496,10 @@
         ]
       },
 
-      // 코너 B: 혜영 (3문제)
+      // 코너 B: 혜영 (3문제, 코드: 1109)
       'B': {
         name: '코너 B (혜영)',
+        npcCode: '1109',
         questions: [
           { 
             title: "문제 1. 8개의 보석",
@@ -464,9 +519,10 @@
         ]
       },
 
-      // 코너 C: 재원 (4문제)
+      // 코너 C: 재원 (4문제, 코드: 0321)
       'C': {
         name: '코너 C (재원)',
+        npcCode: '0321',
         questions: [
           { 
             title: "1. 휴식공간",
@@ -491,9 +547,10 @@
         ]
       },
 
-      // 코너 D: 노아 (3문제)
+      // 코너 D: 노아 (3문제, 코드: 0422)
       'D': {
         name: '코너 D (노아)',
+        npcCode: '0422',
         questions: [
           { 
             title: "1. 머릿돌의 비밀",
@@ -549,17 +606,51 @@
     function showError(inputId, msgId, message) {
       const input = document.getElementById(inputId);
       const msg = document.getElementById(msgId);
-      input.classList.remove('error');
-      void input.offsetWidth;
-      input.classList.add('error');
-      msg.textContent = message;
+      if (input) {
+        input.classList.remove('error');
+        void input.offsetWidth;
+        input.classList.add('error');
+      }
+      if (msg) msg.textContent = message;
       if (navigator.vibrate) navigator.vibrate(200);
     }
 
     function clearInput(inputId, msgId) {
-      document.getElementById(inputId).value = '';
-      document.getElementById(inputId).classList.remove('error');
-      document.getElementById(msgId).textContent = '';
+      const input = document.getElementById(inputId);
+      const msg = document.getElementById(msgId);
+      if (input) {
+        input.value = '';
+        input.classList.remove('error');
+      }
+      if (msg) msg.textContent = '';
+    }
+
+    // 4자리 빈칸 입력 제어 로직
+    function handleCodeInput(current, index) {
+      if (current.value.length === 1) {
+        if (index < 4) {
+          document.getElementById(`codeDigit${index + 1}`).focus();
+        }
+      }
+    }
+
+    function handleCodeKeydown(event, index) {
+      if (event.key === 'Backspace' && !event.target.value) {
+        if (index > 1) {
+          const prev = document.getElementById(`codeDigit${index - 1}`);
+          prev.focus();
+          prev.value = '';
+        }
+      }
+    }
+
+    function resetGateInputs() {
+      for (let i = 1; i <= 4; i++) {
+        const el = document.getElementById(`codeDigit${i}`);
+        el.value = '';
+        el.classList.remove('error');
+      }
+      document.getElementById('gateError').textContent = '';
     }
 
     // --- 4. 게임 로직 ---
@@ -575,7 +666,7 @@
       };
 
       // 윤현: A -> B -> C -> D
-      // 보라: D -> A -> B -> C (요청 반영)
+      // 보라: D -> A -> B -> C
       // 소영: C -> D -> A -> B
       if (group === 1) myRoute = ['A', 'B', 'C', 'D'];
       if (group === 2) myRoute = ['D', 'A', 'B', 'C'];
@@ -583,8 +674,61 @@
 
       document.getElementById('groupIndicator').textContent = `🚩 ${groupNames[group]}`;
       document.getElementById('gameHeader').style.display = 'block';
+      
+      // 첫 번째 코너의 NPC 코드 확인 화면으로 진입
+      currentCornerIdx = 0;
+      currentQuizIdx = 0;
+      showCornerGate();
+    }
+
+    // 코너 시작 전 NPC 코드 입력 게이트 화면 로드
+    function showCornerGate() {
       setSpecialMode(false);
-      loadQuiz();
+      const cornerId = myRoute[currentCornerIdx];
+      const corner = cornerData[cornerId];
+
+      document.getElementById('gateCornerBadge').textContent = `${corner.name} 도착`;
+      document.getElementById('gateTitle').textContent = `${corner.name} 시작 암호`;
+      document.getElementById('gateDesc').textContent = "코너지기가 제공하는 코드를 입력해야지 문제를 시작할 수 있습니다.";
+      
+      resetGateInputs();
+      switchView('view-corner-gate');
+      setTimeout(() => {
+        document.getElementById('codeDigit1').focus();
+      }, 300);
+    }
+
+    // NPC 4자리 코드 확인
+    function checkGateCode() {
+      const cornerId = myRoute[currentCornerIdx];
+      const corner = cornerData[cornerId];
+
+      const digit1 = document.getElementById('codeDigit1').value.trim();
+      const digit2 = document.getElementById('codeDigit2').value.trim();
+      const digit3 = document.getElementById('codeDigit3').value.trim();
+      const digit4 = document.getElementById('codeDigit4').value.trim();
+      const enteredCode = `${digit1}${digit2}${digit3}${digit4}`;
+
+      if (enteredCode.length < 4) {
+        document.getElementById('gateError').textContent = '4자리 코드를 모두 입력해 주세요.';
+        return;
+      }
+
+      if (enteredCode === corner.npcCode) {
+        // 일치하면 문제 풀이 화면으로 진입!
+        currentQuizIdx = 0;
+        loadQuiz();
+      } else {
+        // 오답 처리
+        for (let i = 1; i <= 4; i++) {
+          const el = document.getElementById(`codeDigit${i}`);
+          el.classList.remove('error');
+          void el.offsetWidth;
+          el.classList.add('error');
+        }
+        document.getElementById('gateError').textContent = '코드가 일치하지 않습니다. 코너지기에게 확인하세요.';
+        if (navigator.vibrate) navigator.vibrate(200);
+      }
     }
 
     function loadQuiz() {
@@ -625,18 +769,15 @@
       );
 
       if (validAnswers.includes(input)) {
-        // 단서 및 조각 명칭 계산 (요청 4번 반영)
-        const curClueName = clueNames[currentCornerIdx]; // 첫 번째 단서, 두 번째 단서...
+        const curClueName = clueNames[currentCornerIdx];
         const totalQ = corner.questions.length;
         let curPieceName = "";
 
         if (totalQ === 3) {
-          // 3문제 코너: 첫 번째 조각 / 두 번째 조각 / 마지막 조각
           if (currentQuizIdx === 0) curPieceName = "첫 번째 조각";
           else if (currentQuizIdx === 1) curPieceName = "두 번째 조각";
           else curPieceName = "마지막 조각";
         } else {
-          // 4문제 코너: 첫 번째 조각 / 두 번째 조각 / 세 번째 조각 / 마지막 조각
           if (currentQuizIdx === 0) curPieceName = "첫 번째 조각";
           else if (currentQuizIdx === 1) curPieceName = "두 번째 조각";
           else if (currentQuizIdx === 2) curPieceName = "세 번째 조각";
@@ -658,7 +799,7 @@
       if (currentQuizIdx < corner.questions.length) {
         loadQuiz();
       } else {
-        // 코너 마지막 문제를 푼 다음 화면 (요청 5번 반영: 배경색 차별화 + 문구 적용)
+        // 코너 마지막 문제를 푼 다음 화면
         setSpecialMode(true);
         const curClueName = clueNames[currentCornerIdx];
         document.getElementById('cornerClueBadge').textContent = `${corner.name} 완료 (${curClueName})`;
@@ -678,7 +819,6 @@
       const expectedClue = stageClues[currentCornerIdx].clue;
 
       if (input === expectedClue) {
-        // 단서 해독 성공 (정답 화면은 배경색 유지)
         document.getElementById('cornerFinalClue').textContent = expectedClue;
         collectedFinalClues.push(expectedClue);
         
@@ -690,14 +830,15 @@
     }
 
     function goToNextCorner() {
-      // 다음 코너 이동 시 배경색 원래대로 복귀
       setSpecialMode(false);
       currentCornerIdx++;
       currentQuizIdx = 0;
 
       if (currentCornerIdx < 4) {
-        loadQuiz();
+        // 다음 코너도 바로 문제를 보여주지 않고 NPC 코드 입력 게이트 화면으로 안내
+        showCornerGate();
       } else {
+        // 4개 코너를 모두 돌았을 때 최종 장소 암호 화면
         document.getElementById('progressFill').style.width = '100%';
         clearInput('finalInput', 'finalError');
         switchView('view-final');
